@@ -1,0 +1,56 @@
+# myco/docker-compose.yml
+version: "3.9"
+
+services:
+  myco:
+    build: .
+    container_name: myco
+    restart: unless-stopped
+    ports:
+      - "127.0.0.1:8000:8000"   # only bind to localhost — put nginx/Caddy in front
+    environment:
+      - MYCO_PARENT_TOKEN=${MYCO_PARENT_TOKEN}
+      - ANTHROPIC_API_KEY=${ANTHROPIC_API_KEY:-}
+      - OPENAI_API_KEY=${OPENAI_API_KEY:-}
+      - GOOGLE_API_KEY=${GOOGLE_API_KEY:-}
+      - MISTRAL_API_KEY=${MISTRAL_API_KEY:-}
+      - OLLAMA_HOST=${OLLAMA_HOST:-http://ollama:11434}
+      - MYCO_CORS_ORIGINS=${MYCO_CORS_ORIGINS:-http://localhost:3000}
+      - MYCO_LOG_LEVEL=${MYCO_LOG_LEVEL:-INFO}
+    volumes:
+      - myco_data:/app/data        # persistent DB + chroma
+    read_only: true                # read-only root fs
+    tmpfs:
+      - /tmp:size=64m              # writable temp only
+    security_opt:
+      - no-new-privileges:true
+    cap_drop:
+      - ALL
+    networks:
+      - myco_net
+
+  ollama:
+    image: ollama/ollama:latest
+    container_name: myco_ollama
+    restart: unless-stopped
+    volumes:
+      - ollama_data:/root/.ollama
+    networks:
+      - myco_net
+    # GPU support (uncomment if available):
+    # deploy:
+    #   resources:
+    #     reservations:
+    #       devices:
+    #         - driver: nvidia
+    #           count: 1
+    #           capabilities: [gpu]
+
+volumes:
+  myco_data:
+  ollama_data:
+
+networks:
+  myco_net:
+    driver: bridge
+    internal: false

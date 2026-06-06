@@ -1,0 +1,106 @@
+# myco/config/models.yaml
+# All model and runtime configuration for Myco.
+# Edit this file to match your hardware.
+
+db_path:    data/myco.db
+chroma_path: data/chroma
+tfidf_path: data/tfidf_memory.json
+graph_path: data/graph.json
+
+# ── Resource profile ──────────────────────────────────────────────────────────
+# Choose one: "minimal" | "standard" | "full"
+#
+#   minimal  — 2GB RAM PC, no ML libraries, TF-IDF memory, tiny local model
+#   standard — 4GB RAM, ChromaDB (no embeddings), small local model  (DEFAULT)
+#   full     — 8GB+ RAM, ChromaDB + sentence-transformers, larger models
+#
+resource_profile: standard
+
+# Override individual settings here (overrides profile defaults):
+prefer_tfidf: false        # true = always use TF-IDF even if ChromaDB is installed
+max_graph_nodes: 2000      # cap knowledge graph size
+max_graph_edges: 5000
+
+models:
+  prefer_local: true       # always try local Ollama first
+  timeout_s: 60            # longer timeout for slow hardware
+
+  # Model tiers — router picks from these based on task complexity
+  # For low-end PCs: use only tier_local with a tiny model
+  tiers:
+    tier_powerful:
+      - ollama/llama3.2:3b       # best local option for low-end
+      - anthropic/claude-opus-4-5
+      - openai/gpt-4o
+
+    tier_balanced:
+      - ollama/llama3.2:3b
+      - ollama/qwen2.5:1.5b
+      - anthropic/claude-sonnet-4-20250514
+      - openai/gpt-4o-mini
+
+    tier_fast:
+      - ollama/qwen2.5:1.5b      # ~800MB RAM, good quality/speed
+      - ollama/llama3.2:1b       # ~900MB RAM
+      - ollama/tinyllama          # ~500MB RAM, last resort
+      - anthropic/claude-haiku-4-5-20251001
+
+    tier_local:
+      - ollama/qwen2.5:1.5b      # recommended default for low-end
+      - ollama/llama3.2:1b
+      - ollama/tinyllama
+
+  # API keys — or use environment variables (preferred)
+  api_keys:
+    anthropic: ""    # env: ANTHROPIC_API_KEY
+    openai:    ""    # env: OPENAI_API_KEY
+    google:    ""    # env: GOOGLE_API_KEY
+    mistral:   ""    # env: MISTRAL_API_KEY
+    cohere:    ""    # env: COHERE_API_KEY
+
+  # Local endpoints
+  custom_endpoints:
+    ollama: "http://localhost:11434"
+
+# ── Generation parameters ─────────────────────────────────────────────────────
+generation:
+  max_tokens:  512          # keep responses concise — saves RAM and is faster
+  temperature: 0.7
+  stage_temperatures:
+    Seedling:    0.9
+    Sprout:      0.85
+    Sapling:     0.8
+    Budding:     0.75
+    Blooming:    0.7
+    Flourishing: 0.65
+    Ancient:     0.6
+
+# ── Tools ─────────────────────────────────────────────────────────────────────
+tools:
+  - calculator
+  - current_time
+  - web_search
+  - read_file
+  - write_memory
+  - read_memory
+  - list_memory
+
+# ── Safety ────────────────────────────────────────────────────────────────────
+safety:
+  self_improve_enabled: true
+  block_injections:     true
+  injection_threshold:  1
+  max_ingest_chars:     50000
+  max_chat_chars:       4000
+
+# ── Scheduler ─────────────────────────────────────────────────────────────────
+scheduler:
+  heartbeat_mins:    30    # growth heartbeat interval (lower = more CPU)
+  consolidation_hour: 3   # hour (UTC) for nightly memory consolidation
+  graph_persist_mins: 15  # how often to save knowledge graph to disk
+
+# ── Autonomous learning ───────────────────────────────────────────────────────
+learner:
+  enabled:            true
+  research_delay_s:   30   # seconds between research tasks (be gentle on slow PCs)
+  bootstrap_on_start: true # proactively learn core skills on first run

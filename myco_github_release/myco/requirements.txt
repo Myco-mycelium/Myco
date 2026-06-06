@@ -1,0 +1,28 @@
+# myco/requirements.txt
+# Core
+fastapi>=0.110.0
+uvicorn[standard]>=0.29.0
+pydantic>=2.6.0
+
+# LLM abstraction — supports 100+ models
+litellm>=1.40.0
+
+# Memory
+chromadb>=0.5.0
+networkx>=3.3
+
+# Tools
+httpx>=0.27.0
+duckduckgo-search>=6.0
+
+# Config + scheduling
+pyyaml>=6.0
+apscheduler>=3.10.0
+
+# Optional — for richer features
+# sentence-transformers   # local embeddings
+# torch                   # required for sentence-transformers
+# pypdf                   # PDF ingestion
+# pillow                  # image processing
+# openai-whisper          # audio transcription
+# celery[redis]           # production task queue (replaces apscheduler at scale)

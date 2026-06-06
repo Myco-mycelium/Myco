@@ -1,0 +1,2188 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>Myco</title>
+<style>
+/* ═══════════════════════════════════════════════════
+   MYCO — Natural Growth UI
+   Theme: Warm Organic · Clay + Moss + Cream
+   Fonts: System serif for warmth, mono for code
+   ═══════════════════════════════════════════════════ */
+
+:root {
+  --sand:    #f5f0e8;
+  --cream:   #faf8f3;
+  --clay:    #c8956c;
+  --clay2:   #e8b090;
+  --moss:    #5a8a6a;
+  --moss2:   #7aaa8a;
+  --bark:    #3a2e28;
+  --bark2:   #5c4a40;
+  --bark3:   #8a7068;
+  --stone:   #e0d8cc;
+  --stone2:  #ccc4b8;
+  --fog:     #f0ece4;
+  --sky:     #6898c8;
+  --amber:   #c88030;
+  --red:     #c85858;
+  --r:       8px;
+  --r2:      14px;
+  --r3:      20px;
+  --shadow:  0 2px 12px rgba(58,46,40,.10);
+  --shadow2: 0 4px 24px rgba(58,46,40,.15);
+}
+
+/* Dark mode */
+@media (prefers-color-scheme: dark) {
+  :root {
+    --sand:   #1a1610;
+    --cream:  #211d17;
+    --clay:   #e0a878;
+    --clay2:  #c88858;
+    --moss:   #6aaa7a;
+    --moss2:  #8acc9a;
+    --bark:   #f0e8d8;
+    --bark2:  #d0c4b0;
+    --bark3:  #907868;
+    --stone:  #2e2820;
+    --stone2: #3e3428;
+    --fog:    #181410;
+    --shadow: 0 2px 12px rgba(0,0,0,.4);
+    --shadow2:0 4px 24px rgba(0,0,0,.5);
+  }
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: 'Iowan Old Style', 'Palatino Linotype', Georgia, 'Times New Roman', serif;
+  background: var(--sand);
+  color: var(--bark);
+  height: 100vh;
+  overflow: hidden;
+  font-size: 15px;
+  line-height: 1.6;
+}
+
+/* ── APP SHELL ── */
+#app {
+  display: grid;
+  grid-template-columns: 72px 240px 1fr;
+  grid-template-rows: 100vh;
+  height: 100vh;
+}
+
+/* ── ICON RAIL ── */
+#rail {
+  background: var(--fog);
+  border-right: 1px solid var(--stone2);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 16px 0;
+  gap: 4px;
+  z-index: 10;
+}
+
+.rail-logo {
+  font-size: 28px;
+  margin-bottom: 16px;
+  cursor: default;
+  user-select: none;
+}
+
+.rail-btn {
+  width: 48px;
+  height: 48px;
+  border-radius: var(--r2);
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 3px;
+  transition: background .15s, transform .1s;
+  position: relative;
+}
+.rail-btn:hover { background: var(--stone); transform: scale(1.05); }
+.rail-btn.active { background: var(--stone); }
+.rail-btn.active::before {
+  content: '';
+  position: absolute;
+  left: -1px;
+  width: 3px;
+  height: 28px;
+  background: var(--clay);
+  border-radius: 0 3px 3px 0;
+}
+.rail-icon { font-size: 20px; line-height: 1; }
+.rail-label { font-size: 9px; color: var(--bark3); letter-spacing: .04em; font-family: ui-monospace, monospace; }
+.rail-btn.active .rail-label { color: var(--clay); }
+.rail-spacer { flex: 1; }
+
+/* ── SIDEBAR ── */
+#sidebar {
+  background: var(--cream);
+  border-right: 1px solid var(--stone);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+#sidebar-header {
+  padding: 20px 16px 12px;
+  border-bottom: 1px solid var(--stone);
+}
+.sidebar-title {
+  font-size: 13px;
+  font-weight: normal;
+  letter-spacing: .06em;
+  text-transform: uppercase;
+  color: var(--bark3);
+  font-family: ui-monospace, monospace;
+}
+
+#sidebar-body { flex: 1; overflow-y: auto; padding: 8px 0; }
+
+.sidebar-item {
+  padding: 9px 16px;
+  cursor: pointer;
+  border-radius: var(--r);
+  margin: 0 8px 2px;
+  font-size: 13px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  color: var(--bark2);
+  border: 1px solid transparent;
+  transition: all .12s;
+}
+.sidebar-item:hover { background: var(--stone); color: var(--bark); }
+.sidebar-item.active { background: var(--stone); border-color: var(--stone2); color: var(--bark); }
+.sidebar-item .si-icon { font-size: 16px; flex-shrink: 0; }
+.sidebar-item .si-text { flex: 1; }
+.sidebar-item .si-badge {
+  font-size: 10px;
+  background: var(--clay);
+  color: white;
+  border-radius: 10px;
+  padding: 1px 7px;
+  font-family: ui-monospace, monospace;
+}
+
+#sidebar-footer {
+  padding: 12px 16px;
+  border-top: 1px solid var(--stone);
+}
+
+/* ── MIND CARD in sidebar ── */
+.mind-card {
+  margin: 12px 8px;
+  background: var(--fog);
+  border: 1px solid var(--stone2);
+  border-radius: var(--r2);
+  padding: 14px;
+}
+.mc-stage { display: flex; align-items: center; gap: 10px; margin-bottom: 10px; }
+.mc-face { font-size: 28px; }
+.mc-info { flex: 1; }
+.mc-name { font-size: 13px; color: var(--moss); letter-spacing: .04em; }
+.mc-mood { font-size: 11px; color: var(--bark3); margin-top: 1px; font-style: italic; }
+.mc-xp-wrap { height: 4px; background: var(--stone2); border-radius: 2px; margin-bottom: 10px; overflow: hidden; }
+.mc-xp { height: 100%; background: linear-gradient(90deg, var(--moss), var(--clay)); border-radius: 2px; transition: width .6s ease; }
+.mc-stats { display: grid; grid-template-columns: repeat(2,1fr); gap: 6px; }
+.mc-stat { text-align: center; background: var(--cream); border-radius: var(--r); padding: 6px 4px; border: 1px solid var(--stone); }
+.mc-stat-n { font-size: 17px; color: var(--bark); font-family: ui-monospace, monospace; }
+.mc-stat-l { font-size: 9px; color: var(--bark3); letter-spacing: .04em; text-transform: uppercase; }
+
+/* ── MAIN CONTENT ── */
+#main {
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  background: var(--sand);
+}
+
+/* ── TOP BAR ── */
+#topbar {
+  height: 56px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 24px;
+  border-bottom: 1px solid var(--stone);
+  background: var(--cream);
+  flex-shrink: 0;
+}
+.tb-title {
+  font-size: 18px;
+  font-weight: normal;
+  color: var(--bark);
+  letter-spacing: -.01em;
+}
+.tb-right { display: flex; align-items: center; gap: 12px; }
+.status-pill {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 11px;
+  color: var(--bark3);
+  font-family: ui-monospace, monospace;
+  background: var(--stone);
+  padding: 4px 12px;
+  border-radius: 20px;
+}
+.status-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--moss); }
+.status-dot.busy { background: var(--amber); animation: pulse 1s infinite; }
+.status-dot.off  { background: var(--red); animation: none; }
+@keyframes pulse { 0%,100%{opacity:1} 50%{opacity:.3} }
+
+/* ── PANELS ── */
+.panel { display: none; flex: 1; overflow: hidden; flex-direction: column; }
+.panel.active { display: flex; }
+
+/* ══════════════════════════════════════════
+   CHAT PANEL
+   ══════════════════════════════════════════ */
+#chat-messages {
+  flex: 1;
+  overflow-y: auto;
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.bubble-wrap {
+  display: flex;
+  gap: 10px;
+  align-items: flex-start;
+  max-width: 78%;
+}
+.bubble-wrap.user { align-self: flex-end; flex-direction: row-reverse; }
+
+.bubble-avatar {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: var(--stone);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 16px;
+  flex-shrink: 0;
+  border: 1px solid var(--stone2);
+}
+
+.bubble {
+  padding: 12px 16px;
+  border-radius: var(--r2);
+  font-size: 14px;
+  line-height: 1.65;
+  border: 1px solid var(--stone);
+  background: var(--cream);
+  box-shadow: var(--shadow);
+}
+.bubble-wrap.user .bubble {
+  background: var(--clay);
+  color: white;
+  border-color: var(--clay2);
+}
+.bubble-name {
+  font-size: 10px;
+  letter-spacing: .06em;
+  text-transform: uppercase;
+  color: var(--bark3);
+  margin-bottom: 4px;
+  font-family: ui-monospace, monospace;
+}
+.bubble-wrap.user .bubble-name { color: rgba(255,255,255,.7); }
+
+.typing { display: inline-flex; gap: 4px; align-items: center; padding: 4px 0; }
+.typing span {
+  width: 6px; height: 6px; border-radius: 50%;
+  background: var(--bark3); animation: tdot 1.2s infinite;
+}
+.typing span:nth-child(2){animation-delay:.2s}
+.typing span:nth-child(3){animation-delay:.4s}
+@keyframes tdot{0%,80%,100%{opacity:.2}40%{opacity:1}}
+
+#chat-bottom {
+  padding: 16px 24px;
+  border-top: 1px solid var(--stone);
+  background: var(--cream);
+  flex-shrink: 0;
+}
+.chat-input-wrap {
+  display: flex;
+  gap: 10px;
+  align-items: flex-end;
+  background: var(--sand);
+  border: 1.5px solid var(--stone2);
+  border-radius: var(--r2);
+  padding: 8px 12px;
+  transition: border-color .15s;
+}
+.chat-input-wrap:focus-within { border-color: var(--clay2); }
+#chat-input {
+  flex: 1;
+  background: transparent;
+  border: none;
+  outline: none;
+  color: var(--bark);
+  font-family: inherit;
+  font-size: 14px;
+  resize: none;
+  min-height: 28px;
+  max-height: 120px;
+  line-height: 1.5;
+}
+#chat-input::placeholder { color: var(--bark3); }
+#chat-send {
+  background: var(--clay);
+  color: white;
+  border: none;
+  border-radius: var(--r);
+  padding: 8px 18px;
+  font-family: inherit;
+  font-size: 13px;
+  cursor: pointer;
+  transition: opacity .15s, transform .1s;
+  white-space: nowrap;
+}
+#chat-send:hover { opacity: .9; transform: scale(1.02); }
+#chat-send:disabled { opacity: .4; cursor: not-allowed; transform: none; }
+.chat-hints {
+  display: flex;
+  gap: 8px;
+  margin-top: 8px;
+  flex-wrap: wrap;
+}
+.hint-chip {
+  font-size: 11px;
+  color: var(--bark3);
+  background: var(--stone);
+  border: 1px solid var(--stone2);
+  border-radius: 20px;
+  padding: 3px 12px;
+  cursor: pointer;
+  transition: all .12s;
+  font-style: italic;
+}
+.hint-chip:hover { background: var(--stone2); color: var(--bark); }
+
+/* ══════════════════════════════════════════
+   SHARED PANEL STYLES
+   ══════════════════════════════════════════ */
+.panel-body { flex: 1; overflow-y: auto; padding: 24px; }
+.section-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 16px;
+}
+.section-title { font-size: 20px; font-weight: normal; }
+.section-sub { font-size: 12px; color: var(--bark3); margin-top: 2px; font-family: ui-monospace, monospace; }
+
+.card {
+  background: var(--cream);
+  border: 1px solid var(--stone);
+  border-radius: var(--r2);
+  padding: 16px;
+  margin-bottom: 12px;
+  box-shadow: var(--shadow);
+}
+.card-title {
+  font-size: 13px;
+  color: var(--bark3);
+  letter-spacing: .05em;
+  text-transform: uppercase;
+  margin-bottom: 10px;
+  font-family: ui-monospace, monospace;
+}
+
+/* Buttons */
+.btn {
+  padding: 8px 18px;
+  border-radius: var(--r);
+  border: 1px solid var(--stone2);
+  background: var(--cream);
+  color: var(--bark);
+  font-family: inherit;
+  font-size: 13px;
+  cursor: pointer;
+  transition: all .12s;
+}
+.btn:hover { background: var(--stone); border-color: var(--bark3); }
+.btn.primary { background: var(--clay); color: white; border-color: var(--clay); }
+.btn.primary:hover { opacity: .9; }
+.btn.success { background: var(--moss); color: white; border-color: var(--moss); }
+.btn.danger  { background: var(--red);  color: white; border-color: var(--red); }
+.btn.sm { padding: 5px 12px; font-size: 11px; }
+
+/* Form elements */
+.form-group { margin-bottom: 14px; }
+.form-label {
+  display: block;
+  font-size: 12px;
+  color: var(--bark3);
+  letter-spacing: .04em;
+  text-transform: uppercase;
+  margin-bottom: 5px;
+  font-family: ui-monospace, monospace;
+}
+.form-input, .form-select, .form-textarea {
+  width: 100%;
+  padding: 9px 12px;
+  border: 1.5px solid var(--stone2);
+  border-radius: var(--r);
+  background: var(--sand);
+  color: var(--bark);
+  font-family: inherit;
+  font-size: 13px;
+  outline: none;
+  transition: border-color .15s;
+}
+.form-input:focus, .form-select:focus, .form-textarea:focus { border-color: var(--clay2); }
+.form-textarea { resize: vertical; min-height: 80px; font-family: ui-monospace, monospace; font-size: 12px; }
+.form-row { display: flex; gap: 10px; align-items: flex-end; }
+.form-row .form-group { flex: 1; margin-bottom: 0; }
+
+/* Tags / chips */
+.chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 3px 10px;
+  border-radius: 20px;
+  font-size: 11px;
+  font-family: ui-monospace, monospace;
+  border: 1px solid var(--stone2);
+  background: var(--fog);
+  color: var(--bark3);
+}
+.chip.green { background: rgba(90,138,106,.12); border-color: var(--moss); color: var(--moss); }
+.chip.amber { background: rgba(200,128,48,.12); border-color: var(--amber); color: var(--amber); }
+.chip.red   { background: rgba(200,88,88,.12);  border-color: var(--red);   color: var(--red); }
+.chip.blue  { background: rgba(104,152,200,.12); border-color: var(--sky);   color: var(--sky); }
+
+/* Toggle switch */
+.toggle-wrap { display: flex; align-items: center; gap: 10px; }
+.toggle { position: relative; width: 42px; height: 24px; flex-shrink: 0; }
+.toggle input { opacity: 0; width: 0; height: 0; }
+.toggle-slider {
+  position: absolute; inset: 0;
+  background: var(--stone2); border-radius: 12px; cursor: pointer; transition: .2s;
+}
+.toggle-slider::before {
+  content: ''; position: absolute;
+  width: 18px; height: 18px; left: 3px; top: 3px;
+  background: white; border-radius: 50%; transition: .2s;
+  box-shadow: var(--shadow);
+}
+.toggle input:checked + .toggle-slider { background: var(--moss); }
+.toggle input:checked + .toggle-slider::before { transform: translateX(18px); }
+.toggle-label { font-size: 13px; color: var(--bark2); }
+
+/* ══════════════════════════════════════════
+   PLUGINS PANEL
+   ══════════════════════════════════════════ */
+.plugin-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px,1fr)); gap: 12px; }
+.plugin-card {
+  background: var(--cream);
+  border: 1px solid var(--stone);
+  border-radius: var(--r2);
+  padding: 16px;
+  box-shadow: var(--shadow);
+  transition: box-shadow .15s, transform .1s;
+  position: relative;
+}
+.plugin-card:hover { box-shadow: var(--shadow2); transform: translateY(-1px); }
+.plugin-card.disabled { opacity: .5; }
+.pc-header { display: flex; align-items: flex-start; gap: 10px; margin-bottom: 8px; }
+.pc-icon { font-size: 28px; flex-shrink: 0; }
+.pc-info { flex: 1; min-width: 0; }
+.pc-name { font-size: 14px; color: var(--bark); font-weight: normal; }
+.pc-type { font-size: 10px; color: var(--bark3); font-family: ui-monospace, monospace; letter-spacing: .04em; text-transform: uppercase; margin-top: 2px; }
+.pc-desc { font-size: 12px; color: var(--bark3); margin-bottom: 10px; line-height: 1.5; }
+.pc-tools { display: flex; flex-wrap: wrap; gap: 4px; margin-bottom: 10px; }
+.pc-actions { display: flex; gap: 6px; }
+
+/* Plugin viewer panel */
+#plugin-viewers { margin-top: 24px; }
+.viewer-container {
+  background: var(--cream);
+  border: 1px solid var(--stone);
+  border-radius: var(--r2);
+  margin-bottom: 16px;
+  overflow: hidden;
+  box-shadow: var(--shadow);
+}
+.viewer-title {
+  padding: 10px 16px;
+  border-bottom: 1px solid var(--stone);
+  font-size: 12px;
+  color: var(--bark3);
+  font-family: ui-monospace, monospace;
+  letter-spacing: .04em;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.viewer-body { padding: 0; }
+.viewer-iframe {
+  width: 100%;
+  border: none;
+  min-height: 300px;
+  background: var(--sand);
+}
+
+/* ══════════════════════════════════════════
+   SETTINGS PANEL
+   ══════════════════════════════════════════ */
+.settings-tabs { display: flex; gap: 2px; border-bottom: 1px solid var(--stone); margin-bottom: 20px; }
+.stab {
+  padding: 10px 18px;
+  font-size: 13px;
+  background: transparent;
+  border: none;
+  border-bottom: 2px solid transparent;
+  color: var(--bark3);
+  cursor: pointer;
+  font-family: inherit;
+  transition: all .15s;
+  margin-bottom: -1px;
+}
+.stab:hover { color: var(--bark); }
+.stab.active { color: var(--clay); border-bottom-color: var(--clay); }
+.stab-body { display: none; }
+.stab-body.active { display: block; }
+
+.setting-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 0;
+  border-bottom: 1px solid var(--stone);
+  gap: 16px;
+}
+.setting-row:last-child { border-bottom: none; }
+.setting-info { flex: 1; }
+.setting-name { font-size: 14px; color: var(--bark); }
+.setting-desc { font-size: 12px; color: var(--bark3); margin-top: 2px; font-style: italic; }
+.setting-control { flex-shrink: 0; min-width: 160px; text-align: right; }
+
+/* ══════════════════════════════════════════
+   TERMINAL PANEL
+   ══════════════════════════════════════════ */
+#terminal-body {
+  flex: 1;
+  background: #1a1610;
+  color: #c8b090;
+  font-family: ui-monospace, 'Cascadia Code', 'Fira Code', monospace;
+  font-size: 13px;
+  padding: 16px;
+  overflow-y: auto;
+  line-height: 1.6;
+}
+.term-line { margin-bottom: 4px; }
+.term-prompt { color: var(--moss2); }
+.term-out { color: #c8b090; white-space: pre-wrap; }
+.term-err { color: #f07070; }
+.term-sys { color: #8888a8; font-style: italic; }
+
+#terminal-input-wrap {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 12px 16px;
+  background: #0f0d09;
+  border-top: 1px solid #2a2018;
+  flex-shrink: 0;
+}
+#terminal-input {
+  flex: 1;
+  background: transparent;
+  border: none;
+  outline: none;
+  color: #c8b090;
+  font-family: ui-monospace, monospace;
+  font-size: 13px;
+}
+
+.cmd-palette {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  padding: 10px 16px;
+  background: #100e0a;
+  border-bottom: 1px solid #2a2018;
+  flex-shrink: 0;
+}
+.cmd-btn {
+  padding: 4px 12px;
+  background: #2a2018;
+  border: 1px solid #3a3020;
+  border-radius: var(--r);
+  color: #c8b090;
+  font-family: ui-monospace, monospace;
+  font-size: 11px;
+  cursor: pointer;
+  transition: background .12s;
+}
+.cmd-btn:hover { background: #3a3020; }
+
+/* ══════════════════════════════════════════
+   MEMORY PANEL
+   ══════════════════════════════════════════ */
+.mem-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px,1fr)); gap: 10px; }
+.mem-card {
+  background: var(--cream);
+  border: 1px solid var(--stone);
+  border-radius: var(--r2);
+  padding: 12px;
+  font-size: 12px;
+  box-shadow: var(--shadow);
+}
+.mem-type {
+  font-size: 10px;
+  letter-spacing: .05em;
+  text-transform: uppercase;
+  color: var(--moss);
+  margin-bottom: 5px;
+  font-family: ui-monospace, monospace;
+}
+.mem-content { color: var(--bark); line-height: 1.5; }
+.mem-src { font-size: 10px; color: var(--bark3); margin-top: 6px; display: flex; align-items: center; gap: 4px; }
+.src-dot { width: 6px; height: 6px; border-radius: 50%; display: inline-block; flex-shrink: 0; }
+
+/* ══════════════════════════════════════════
+   GROWTH / GOALS PANEL
+   ══════════════════════════════════════════ */
+.goal-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  padding: 12px 0;
+  border-bottom: 1px solid var(--stone);
+}
+.goal-item:last-child { border-bottom: none; }
+.goal-status { font-size: 18px; flex-shrink: 0; margin-top: 2px; }
+.goal-text { flex: 1; font-size: 13px; line-height: 1.55; }
+.goal-done .goal-text { color: var(--bark3); text-decoration: line-through; }
+.goal-meta { font-size: 11px; color: var(--bark3); margin-top: 3px; font-family: ui-monospace, monospace; }
+
+.approval-card {
+  background: var(--cream);
+  border: 1.5px solid var(--amber);
+  border-radius: var(--r2);
+  padding: 14px;
+  margin-bottom: 10px;
+  box-shadow: var(--shadow);
+}
+.ac-header { display: flex; align-items: center; gap: 8px; margin-bottom: 8px; }
+.ac-badge {
+  font-size: 10px;
+  background: rgba(200,128,48,.15);
+  border: 1px solid var(--amber);
+  color: var(--amber);
+  border-radius: 4px;
+  padding: 2px 7px;
+  font-family: ui-monospace, monospace;
+}
+.ac-desc { font-size: 13px; line-height: 1.5; color: var(--bark); margin-bottom: 10px; }
+.ac-actions { display: flex; gap: 8px; }
+
+/* ══════════════════════════════════════════
+   ONBOARDING OVERLAY
+   ══════════════════════════════════════════ */
+#onboarding {
+  position: fixed;
+  inset: 0;
+  background: rgba(58,46,40,.7);
+  backdrop-filter: blur(6px);
+  z-index: 100;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.onboard-card {
+  background: var(--cream);
+  border: 1px solid var(--stone2);
+  border-radius: var(--r3);
+  padding: 40px 48px;
+  max-width: 520px;
+  width: 90vw;
+  box-shadow: var(--shadow2);
+  text-align: center;
+}
+.onboard-emoji { font-size: 64px; margin-bottom: 16px; }
+.onboard-title { font-size: 32px; margin-bottom: 8px; }
+.onboard-sub { font-size: 15px; color: var(--bark3); margin-bottom: 28px; line-height: 1.65; }
+.onboard-step {
+  background: var(--fog);
+  border: 1px solid var(--stone);
+  border-radius: var(--r2);
+  padding: 14px 16px;
+  margin-bottom: 10px;
+  text-align: left;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  font-size: 13px;
+  cursor: pointer;
+  transition: all .15s;
+}
+.onboard-step:hover { background: var(--stone); border-color: var(--stone2); }
+.onboard-step-icon { font-size: 24px; flex-shrink: 0; }
+.onboard-step-text strong { display: block; margin-bottom: 2px; }
+.onboard-step-text span { color: var(--bark3); font-size: 12px; }
+
+/* ══════════════════════════════════════════
+   TOAST
+   ══════════════════════════════════════════ */
+#toast {
+  position: fixed;
+  bottom: 24px;
+  right: 24px;
+  background: var(--bark);
+  color: var(--cream);
+  padding: 12px 20px;
+  border-radius: var(--r2);
+  font-size: 13px;
+  transform: translateY(60px);
+  opacity: 0;
+  transition: all .3s;
+  pointer-events: none;
+  z-index: 999;
+  max-width: 320px;
+  box-shadow: var(--shadow2);
+}
+#toast.show { transform: translateY(0); opacity: 1; }
+#toast.error { background: var(--red); }
+#toast.success { background: var(--moss); }
+
+/* ══════════════════════════════════════════
+   SCROLLBARS
+   ══════════════════════════════════════════ */
+::-webkit-scrollbar { width: 5px; height: 5px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: var(--stone2); border-radius: 4px; }
+
+/* ══════════════════════════════════════════
+   SEARCH INPUT (reusable)
+   ══════════════════════════════════════════ */
+.search-bar {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 16px;
+}
+.search-bar input {
+  flex: 1;
+  padding: 9px 14px;
+  border: 1.5px solid var(--stone2);
+  border-radius: var(--r);
+  background: var(--cream);
+  color: var(--bark);
+  font-family: inherit;
+  font-size: 13px;
+  outline: none;
+}
+.search-bar input:focus { border-color: var(--clay2); }
+
+/* ══════════════════════════════════════════
+   RESPONSIVE (tablet/narrow)
+   ══════════════════════════════════════════ */
+@media (max-width: 900px) {
+  #app { grid-template-columns: 56px 1fr; }
+  #sidebar { display: none; }
+}
+@media (max-width: 600px) {
+  #app { grid-template-columns: 1fr; }
+  #rail { display: none; }
+  .bubble-wrap { max-width: 95%; }
+}
+</style>
+</head>
+<body>
+
+<!-- ══════════════════════════════════════════
+     ONBOARDING OVERLAY (shown on first visit)
+     ══════════════════════════════════════════ -->
+<div id="onboarding" style="display:none">
+  <div class="onboard-card">
+    <div class="onboard-emoji">🌱</div>
+    <div class="onboard-title">Welcome to Myco</div>
+    <div class="onboard-sub">A living AI that grows with you. Let's get you set up in 60 seconds.</div>
+
+    <div class="onboard-step" onclick="onboardStep('token')">
+      <span class="onboard-step-icon">🔑</span>
+      <div class="onboard-step-text">
+        <strong>Enter your token</strong>
+        <span>The key printed when Myco started — paste it here</span>
+      </div>
+    </div>
+    <div class="onboard-step" onclick="onboardStep('model')">
+      <span class="onboard-step-icon">🧠</span>
+      <div class="onboard-step-text">
+        <strong>Pick a brain</strong>
+        <span>Local Ollama (free, offline) or a cloud API</span>
+      </div>
+    </div>
+    <div class="onboard-step" onclick="onboardStep('chat')">
+      <span class="onboard-step-icon">💬</span>
+      <div class="onboard-step-text">
+        <strong>Say hello</strong>
+        <span>Start talking — Myco learns from every conversation</span>
+      </div>
+    </div>
+
+    <div style="margin-top:16px">
+      <div class="form-group">
+        <label class="form-label">Your Myco Token</label>
+        <input class="form-input" id="onboard-token" type="password" placeholder="Paste token from startup output..."/>
+      </div>
+      <button class="btn primary" style="width:100%;padding:12px" onclick="finishOnboard()">Let's grow →</button>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════
+     MAIN APP
+     ══════════════════════════════════════════ -->
+<div id="app">
+
+<!-- ── ICON RAIL ── -->
+<nav id="rail">
+  <div class="rail-logo" title="Myco">🌿</div>
+  <button class="rail-btn active" onclick="showSection('chat')"    id="rail-chat">
+    <span class="rail-icon">💬</span><span class="rail-label">Chat</span>
+  </button>
+  <button class="rail-btn" onclick="showSection('memory')"  id="rail-memory">
+    <span class="rail-icon">🧠</span><span class="rail-label">Memory</span>
+  </button>
+  <button class="rail-btn" onclick="showSection('ingest')"  id="rail-ingest">
+    <span class="rail-icon">📥</span><span class="rail-label">Ingest</span>
+  </button>
+  <button class="rail-btn" onclick="showSection('growth')"  id="rail-growth">
+    <span class="rail-icon">🌱</span><span class="rail-label">Growth</span>
+  </button>
+  <button class="rail-btn" onclick="showSection('plugins')" id="rail-plugins">
+    <span class="rail-icon">🧩</span><span class="rail-label">Plugins</span>
+  </button>
+  <div class="rail-spacer"></div>
+  <button class="rail-btn" onclick="showSection('settings')" id="rail-settings">
+    <span class="rail-icon">⚙️</span><span class="rail-label">Settings</span>
+  </button>
+  <button class="rail-btn" onclick="showSection('terminal')" id="rail-terminal">
+    <span class="rail-icon">⌨️</span><span class="rail-label">Terminal</span>
+  </button>
+</nav>
+
+<!-- ── SIDEBAR ── -->
+<aside id="sidebar">
+  <!-- Mind card -->
+  <div class="mind-card">
+    <div class="mc-stage">
+      <span class="mc-face" id="mc-face">🌱</span>
+      <div class="mc-info">
+        <div class="mc-name" id="mc-stage">Seedling</div>
+        <div class="mc-mood" id="mc-mood">Just sprouted…</div>
+      </div>
+    </div>
+    <div class="mc-xp-wrap"><div class="mc-xp" id="mc-xp" style="width:0%"></div></div>
+    <div class="mc-stats">
+      <div class="mc-stat"><div class="mc-stat-n" id="mc-mem">0</div><div class="mc-stat-l">Memories</div></div>
+      <div class="mc-stat"><div class="mc-stat-n" id="mc-xp-n">0</div><div class="mc-stat-l">XP</div></div>
+      <div class="mc-stat"><div class="mc-stat-n" id="mc-int">0</div><div class="mc-stat-l">Chats</div></div>
+      <div class="mc-stat"><div class="mc-stat-n" id="mc-nodes">0</div><div class="mc-stat-l">Concepts</div></div>
+    </div>
+  </div>
+
+  <div id="sidebar-header">
+    <div class="sidebar-title" id="sidebar-section-title">Chat</div>
+  </div>
+
+  <div id="sidebar-body">
+    <!-- Chat sub-nav -->
+    <div id="sub-chat">
+      <div class="sidebar-item active" onclick="newChat()"><span class="si-icon">✦</span><span class="si-text">New conversation</span></div>
+      <div style="padding:8px 16px 4px;font-size:10px;color:var(--bark3);text-transform:uppercase;letter-spacing:.06em;font-family:ui-monospace,monospace">Recent</div>
+      <div id="chat-history-list"></div>
+    </div>
+    <!-- Memory sub-nav -->
+    <div id="sub-memory" style="display:none">
+      <div class="sidebar-item" onclick="filterMem('all')"><span class="si-icon">📚</span><span class="si-text">All memories</span></div>
+      <div class="sidebar-item" onclick="filterMem('img')"><span class="si-icon">🖼</span><span class="si-text">From images</span></div>
+      <div class="sidebar-item" onclick="filterMem('doc')"><span class="si-icon">📄</span><span class="si-text">From documents</span></div>
+      <div class="sidebar-item" onclick="filterMem('vid')"><span class="si-icon">🎬</span><span class="si-text">From videos</span></div>
+      <div class="sidebar-item" onclick="filterMem('txt')"><span class="si-icon">💬</span><span class="si-text">From conversation</span></div>
+    </div>
+    <!-- Plugins sub-nav -->
+    <div id="sub-plugins" style="display:none">
+      <div class="sidebar-item active" onclick="pluginsTab('installed')"><span class="si-icon">✅</span><span class="si-text">Installed</span></div>
+      <div class="sidebar-item" onclick="pluginsTab('install')"><span class="si-icon">➕</span><span class="si-text">Add plugin</span></div>
+      <div class="sidebar-item" onclick="pluginsTab('examples')"><span class="si-icon">⭐</span><span class="si-text">Examples</span></div>
+    </div>
+    <!-- Settings sub-nav -->
+    <div id="sub-settings" style="display:none">
+      <div class="sidebar-item" onclick="settingsTab('general')"><span class="si-icon">🌿</span><span class="si-text">General</span></div>
+      <div class="sidebar-item" onclick="settingsTab('models')"><span class="si-icon">🧠</span><span class="si-text">AI Models</span></div>
+      <div class="sidebar-item" onclick="settingsTab('memory')"><span class="si-icon">💾</span><span class="si-text">Memory & Storage</span></div>
+      <div class="sidebar-item" onclick="settingsTab('safety')"><span class="si-icon">🛡</span><span class="si-text">Safety</span></div>
+      <div class="sidebar-item" onclick="settingsTab('tokens')"><span class="si-icon">🔑</span><span class="si-text">Access Tokens</span></div>
+    </div>
+  </div>
+
+  <div id="sidebar-footer">
+    <div style="font-size:11px;color:var(--bark3);font-family:ui-monospace,monospace" id="model-label">Brain: loading…</div>
+  </div>
+</aside>
+
+<!-- ── MAIN CONTENT ── -->
+<main id="main">
+  <div id="topbar">
+    <span class="tb-title" id="topbar-title">Chat</span>
+    <div class="tb-right">
+      <div class="status-pill">
+        <span class="status-dot" id="status-dot"></span>
+        <span id="status-text">connecting…</span>
+      </div>
+      <button class="btn sm" onclick="showSection('settings')" title="Settings">⚙️</button>
+    </div>
+  </div>
+
+  <!-- ── CHAT ── -->
+  <div class="panel active" id="panel-chat">
+    <div id="chat-messages"></div>
+    <div id="chat-bottom">
+      <div class="chat-input-wrap">
+        <textarea id="chat-input" placeholder="Talk to Myco… ask anything" rows="1"
+          onkeydown="chatKey(event)" oninput="autoResize(this)"></textarea>
+        <button id="chat-send" onclick="sendChat()">Send ↑</button>
+      </div>
+      <div class="chat-hints" id="chat-hints">
+        <span class="hint-chip" onclick="setInput('What can you do?')">What can you do?</span>
+        <span class="hint-chip" onclick="setInput('Teach me something interesting')">Teach me something</span>
+        <span class="hint-chip" onclick="setInput('What do you know about programming?')">Can you code?</span>
+        <span class="hint-chip" onclick="setInput('What have you learned recently?')">What did you learn?</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── MEMORY ── -->
+  <div class="panel" id="panel-memory">
+    <div class="panel-body">
+      <div class="section-head">
+        <div><div class="section-title">Memory</div><div class="section-sub" id="mem-count-label">Loading…</div></div>
+        <button class="btn" onclick="loadMemory()">↻ Refresh</button>
+      </div>
+      <div class="search-bar">
+        <input id="mem-search" placeholder="Search memories by meaning…" onkeydown="if(event.key==='Enter')loadMemory(document.getElementById('mem-search').value)"/>
+        <button class="btn primary" onclick="loadMemory(document.getElementById('mem-search').value)">Search</button>
+      </div>
+      <div class="mem-grid" id="mem-grid"><div style="color:var(--bark3)">Loading memories…</div></div>
+    </div>
+  </div>
+
+  <!-- ── INGEST ── -->
+  <div class="panel" id="panel-ingest">
+    <div class="panel-body">
+      <div class="section-head">
+        <div><div class="section-title">Teach Myco</div><div class="section-sub">Upload files, paste URLs, or share text — Myco will read and remember</div></div>
+      </div>
+
+      <!-- Drop zone -->
+      <div class="card" id="drop-zone" style="border:2px dashed var(--stone2);text-align:center;padding:32px;cursor:pointer;transition:all .2s"
+           onclick="document.getElementById('file-input').click()"
+           ondragover="dzOver(event)" ondragleave="dzOut(event)" ondrop="dzDrop(event)">
+        <div style="font-size:40px;margin-bottom:10px">📂</div>
+        <div style="font-size:16px;color:var(--bark2);margin-bottom:4px">Drop a file here or click to browse</div>
+        <div style="font-size:12px;color:var(--bark3)">PDF · TXT · MD · CSV · JSON · HTML — any text document</div>
+      </div>
+      <input type="file" id="file-input" style="display:none" accept=".pdf,.txt,.md,.csv,.json,.html,.xml" onchange="ingestFile(this)"/>
+
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:12px">
+        <div class="card">
+          <div class="card-title">🌐 URL or web page</div>
+          <div class="form-row">
+            <div class="form-group">
+              <input class="form-input" id="url-input" placeholder="https://…"/>
+            </div>
+            <button class="btn primary" onclick="ingestURL()">Fetch &amp; Learn</button>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-title">📝 Paste text</div>
+          <div class="form-row">
+            <div class="form-group">
+              <input class="form-input" id="paste-input" placeholder="Paste any text or topic…"/>
+            </div>
+            <button class="btn primary" onclick="ingestPaste()">Teach</button>
+          </div>
+        </div>
+      </div>
+
+      <div id="ingest-feed" style="display:flex;flex-direction:column;gap:8px"></div>
+    </div>
+  </div>
+
+  <!-- ── GROWTH ── -->
+  <div class="panel" id="panel-growth">
+    <div class="panel-body">
+      <div class="section-head">
+        <div><div class="section-title">Growth & Goals</div><div class="section-sub">Myco's autonomous improvement and learning</div></div>
+        <div style="display:flex;gap:8px">
+          <button class="btn" onclick="triggerReflect()">🔮 Reflect now</button>
+          <button class="btn primary" onclick="loadGrowth()">↻ Refresh</button>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-title">⚠️ Pending Approvals — Myco wants to change itself</div>
+        <div id="approvals-list"><div style="color:var(--bark3);font-size:13px;font-style:italic">No changes pending. Myco is happy as it is.</div></div>
+      </div>
+
+      <div class="card">
+        <div class="card-title">🎯 Current Goals</div>
+        <div id="goals-list"><div style="color:var(--bark3);font-size:13px;font-style:italic">No goals yet. Click "Reflect now" to generate some.</div></div>
+        <button class="btn sm" style="margin-top:12px" onclick="triggerReflect()">Generate new goals</button>
+      </div>
+
+      <div class="card">
+        <div class="card-title">📡 Autonomous Learning Queue</div>
+        <div style="display:flex;gap:8px;margin-bottom:12px">
+          <input class="form-input" id="learn-topic" style="flex:1" placeholder="Topic to learn (e.g. 'Python list comprehensions')"/>
+          <button class="btn primary" onclick="queueLearn()">Queue research</button>
+        </div>
+        <div id="learn-stats" style="font-size:13px;color:var(--bark3);font-style:italic">Loading…</div>
+      </div>
+
+      <div class="card">
+        <div class="card-title">📜 Improvement History</div>
+        <div id="history-list"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── PLUGINS ── -->
+  <div class="panel" id="panel-plugins">
+    <div class="panel-body">
+      <!-- Installed tab -->
+      <div id="plugins-installed">
+        <div class="section-head">
+          <div><div class="section-title">Installed Plugins</div><div class="section-sub">Extensions that give Myco new abilities</div></div>
+          <button class="btn primary" onclick="pluginsTab('install')">➕ Add Plugin</button>
+        </div>
+        <div class="plugin-grid" id="plugin-grid"><div style="color:var(--bark3)">No plugins installed yet.</div></div>
+        <div id="plugin-viewers"></div>
+      </div>
+
+      <!-- Install / Merge tab -->
+      <div id="plugins-install" style="display:none">
+        <div class="section-head">
+          <div><div class="section-title">Add a Plugin</div><div class="section-sub">Merge any open-source Python code into Myco — it becomes part of Myco's brain</div></div>
+          <button class="btn" onclick="pluginsTab('installed')">← Back</button>
+        </div>
+
+        <!-- Source picker -->
+        <div class="card" style="margin-bottom:12px">
+          <div class="card-title">Where is the code?</div>
+          <div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:14px" id="src-picker">
+            <button class="btn sm active" onclick="setSrc('paste',this)">📋 Paste code</button>
+            <button class="btn sm" onclick="setSrc('github',this)">🐙 GitHub URL</button>
+            <button class="btn sm" onclick="setSrc('file',this)">📁 Upload .py file</button>
+          </div>
+
+          <!-- Paste mode -->
+          <div id="src-paste">
+            <div class="form-group">
+              <label class="form-label">Python code</label>
+              <textarea class="form-textarea" id="pi-code" style="min-height:160px" placeholder="# Paste any Python code here.
+# Every function becomes a tool Myco can use.
+# Set UI_WIDGET = '&lt;div&gt;...&lt;/div&gt;' to add a visual panel.
+# Example:
+
+def summarize(text: str) -> str:
+    '''Summarize text by extracting key sentences'''
+    sentences = text.split('.')
+    return '. '.join(sentences[:3]) + '.'"></textarea>
+            </div>
+          </div>
+
+          <!-- GitHub mode -->
+          <div id="src-github" style="display:none">
+            <div class="form-group">
+              <label class="form-label">GitHub URL</label>
+              <input class="form-input" id="pi-url" placeholder="https://github.com/user/repo  or  https://github.com/user/repo/blob/main/file.py"/>
+            </div>
+            <div style="font-size:12px;color:var(--bark3);font-style:italic;margin-bottom:8px">
+              Supports: repo URLs (extracts main.py), direct .py file links, raw GitHub URLs
+            </div>
+          </div>
+
+          <!-- File mode -->
+          <div id="src-file" style="display:none">
+            <div class="form-group">
+              <label class="form-label">Upload .py file</label>
+              <input type="file" id="pi-file" accept=".py" class="form-input" onchange="loadPyFile(this)"/>
+            </div>
+          </div>
+        </div>
+
+        <!-- Details -->
+        <div class="card" style="margin-bottom:12px">
+          <div class="card-title">Plugin details</div>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
+            <div class="form-group" style="margin:0">
+              <label class="form-label">Name</label>
+              <input class="form-input" id="pi-name" placeholder="My Plugin"/>
+            </div>
+            <div class="form-group" style="margin:0">
+              <label class="form-label">Type</label>
+              <select class="form-select" id="pi-type">
+                <option value="tool">🔧 Tool — adds functions to Myco</option>
+                <option value="viewer">🖥 Viewer — adds a visual panel (3D, charts…)</option>
+                <option value="processor">⚙️ Processor — transforms data</option>
+                <option value="trainer">📚 Trainer — teaches Myco patterns</option>
+              </select>
+            </div>
+          </div>
+          <div class="form-group" style="margin-top:10px;margin-bottom:0">
+            <label class="form-label">Description (optional)</label>
+            <input class="form-input" id="pi-desc" placeholder="What does this plugin do?"/>
+          </div>
+        </div>
+
+        <!-- Preview step -->
+        <div class="card" id="preview-card" style="display:none;margin-bottom:12px;border-color:var(--moss)">
+          <div class="card-title" style="color:var(--moss)">🔍 Preview — what Myco will gain</div>
+          <div id="preview-content"></div>
+        </div>
+
+        <!-- Actions -->
+        <div style="display:flex;gap:10px;flex-wrap:wrap">
+          <button class="btn" onclick="previewPlugin()">🔍 Preview first</button>
+          <button class="btn primary" onclick="installPlugin()">🔒 Test in sandbox &amp; install</button>
+        </div>
+        <div id="install-result" style="margin-top:12px"></div>
+      </div>
+
+      <!-- Examples tab -->
+      <div id="plugins-examples" style="display:none">
+        <div class="section-head">
+          <div><div class="section-title">Example Plugins</div><div class="section-sub">One click to try</div></div>
+          <button class="btn" onclick="pluginsTab('installed')">← Back</button>
+        </div>
+        <div class="plugin-grid" id="examples-grid"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── SETTINGS ── -->
+  <div class="panel" id="panel-settings">
+    <div class="panel-body">
+      <div class="section-title" style="margin-bottom:20px">Settings</div>
+
+      <!-- General -->
+      <div id="settings-general">
+        <div class="card">
+          <div class="card-title">🌿 General</div>
+          <div class="setting-row">
+            <div class="setting-info">
+              <div class="setting-name">Resource profile</div>
+              <div class="setting-desc">How much RAM Myco can use. Minimal = 2GB, Standard = 4GB, Full = 8GB+</div>
+            </div>
+            <div class="setting-control">
+              <select class="form-select" onchange="saveSetting('resource_profile', this.value)" id="s-resource">
+                <option value="minimal">Minimal (2GB RAM)</option>
+                <option value="standard" selected>Standard (4GB RAM)</option>
+                <option value="full">Full (8GB+ RAM)</option>
+              </select>
+            </div>
+          </div>
+          <div class="setting-row">
+            <div class="setting-info">
+              <div class="setting-name">Self-improvement</div>
+              <div class="setting-desc">Allow Myco to autonomously improve itself (with your approval)</div>
+            </div>
+            <div class="setting-control">
+              <label class="toggle"><input type="checkbox" id="s-selfimprove" onchange="saveSetting('safety.self_improve_enabled', this.checked)" checked/><span class="toggle-slider"></span></label>
+            </div>
+          </div>
+          <div class="setting-row">
+            <div class="setting-info">
+              <div class="setting-name">Autonomous learning</div>
+              <div class="setting-desc">Let Myco search the web when it detects knowledge gaps</div>
+            </div>
+            <div class="setting-control">
+              <label class="toggle"><input type="checkbox" id="s-autolearn" onchange="saveSetting('learner.enabled', this.checked)" checked/><span class="toggle-slider"></span></label>
+            </div>
+          </div>
+          <div class="setting-row">
+            <div class="setting-info">
+              <div class="setting-name">Max response length</div>
+              <div class="setting-desc">Higher = longer answers but slower on weak hardware</div>
+            </div>
+            <div class="setting-control">
+              <select class="form-select" onchange="saveSetting('generation.max_tokens', this.value)" id="s-maxtokens">
+                <option value="256">Short (256 tokens)</option>
+                <option value="512" selected>Standard (512 tokens)</option>
+                <option value="1024">Long (1024 tokens)</option>
+                <option value="2048">Very long (2048 tokens)</option>
+              </select>
+            </div>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-title">🧠 Active Brain</div>
+          <div id="active-model-card" style="font-size:13px;color:var(--bark3)">Loading…</div>
+        </div>
+      </div>
+
+      <!-- Models -->
+      <div id="settings-models" style="display:none">
+        <div class="card">
+          <div class="card-title">🧠 AI Models — Add or Switch</div>
+          <div style="display:flex;flex-wrap:wrap;gap:6px;margin-bottom:14px" id="provider-pills">
+            <button class="btn sm active" onclick="selectProvider('ollama', this)">🦙 Ollama (Local)</button>
+            <button class="btn sm" onclick="selectProvider('anthropic', this)">Claude</button>
+            <button class="btn sm" onclick="selectProvider('openai', this)">OpenAI</button>
+            <button class="btn sm" onclick="selectProvider('google', this)">Gemini</button>
+            <button class="btn sm" onclick="selectProvider('mistral', this)">Mistral</button>
+            <button class="btn sm" onclick="selectProvider('cohere', this)">Cohere</button>
+            <button class="btn sm" onclick="selectProvider('custom', this)">Custom</button>
+          </div>
+          <div id="model-form"></div>
+          <button class="btn primary" style="margin-top:8px" onclick="applyModel()">Use this brain</button>
+          <div id="model-result" style="margin-top:8px;font-size:12px"></div>
+        </div>
+        <div class="card">
+          <div class="card-title">Currently loaded models</div>
+          <div id="model-tiers" style="font-size:13px;color:var(--bark3)">Loading…</div>
+        </div>
+      </div>
+
+      <!-- Memory & Storage -->
+      <div id="settings-memory" style="display:none">
+        <div class="card">
+          <div class="card-title">💾 Memory Backend</div>
+          <div class="setting-row">
+            <div class="setting-info">
+              <div class="setting-name">Force lightweight TF-IDF memory</div>
+              <div class="setting-desc">Uses almost zero RAM. Turn on for very old PCs. ChromaDB is used otherwise.</div>
+            </div>
+            <div class="setting-control">
+              <label class="toggle"><input type="checkbox" id="s-tfidf" onchange="saveSetting('prefer_tfidf', this.checked)"/><span class="toggle-slider"></span></label>
+            </div>
+          </div>
+          <div class="setting-row">
+            <div class="setting-info">
+              <div class="setting-name">Max knowledge graph nodes</div>
+              <div class="setting-desc">Caps how big the concept graph gets. Lower = less RAM.</div>
+            </div>
+            <div class="setting-control">
+              <input class="form-input" type="number" value="2000" style="width:100px" onchange="saveSetting('max_graph_nodes', this.value)"/>
+            </div>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-title">🗓 Mind Snapshots</div>
+          <div style="display:flex;gap:8px;margin-bottom:10px">
+            <input class="form-input" id="snap-label" placeholder="Label this snapshot (optional)"/>
+            <button class="btn primary" onclick="createSnapshot()">Take snapshot</button>
+          </div>
+          <div id="snap-list" style="font-size:13px;color:var(--bark3)">Loading…</div>
+        </div>
+      </div>
+
+      <!-- Safety -->
+      <div id="settings-safety" style="display:none">
+        <div class="card">
+          <div class="card-title">🛡 Security</div>
+          <div class="setting-row">
+            <div class="setting-info">
+              <div class="setting-name">Block prompt injection attempts</div>
+              <div class="setting-desc">Automatically block messages that try to hijack Myco</div>
+            </div>
+            <div class="setting-control">
+              <label class="toggle"><input type="checkbox" id="s-blockinj" checked onchange="saveSetting('safety.block_injections', this.checked)"/><span class="toggle-slider"></span></label>
+            </div>
+          </div>
+          <div class="card-title" style="margin-top:16px">Audit Log</div>
+          <div style="display:flex;gap:8px;margin-bottom:10px">
+            <button class="btn" onclick="loadAudit()">View audit log</button>
+            <button class="btn" onclick="verifyChain()">Verify chain integrity</button>
+          </div>
+          <div id="audit-preview" style="font-size:12px;color:var(--bark3)"></div>
+        </div>
+      </div>
+
+      <!-- Tokens -->
+      <div id="settings-tokens" style="display:none">
+        <div class="card">
+          <div class="card-title">🔑 Access Tokens</div>
+          <div style="font-size:13px;color:var(--bark3);margin-bottom:14px">Create tokens for different access levels. Share user tokens with others who chat with Myco.</div>
+          <div style="display:grid;grid-template-columns:1fr 1fr auto;gap:8px;margin-bottom:10px;align-items:end">
+            <div class="form-group" style="margin:0">
+              <label class="form-label">Label</label>
+              <input class="form-input" id="tok-label" placeholder="e.g. my-phone"/>
+            </div>
+            <div class="form-group" style="margin:0">
+              <label class="form-label">Role</label>
+              <select class="form-select" id="tok-role">
+                <option value="readonly">Read-only (view only)</option>
+                <option value="user" selected>User (chat + ingest)</option>
+                <option value="parent">Parent (full admin)</option>
+              </select>
+            </div>
+            <button class="btn primary" onclick="createToken()">Create</button>
+          </div>
+          <div id="new-token-display" style="display:none;background:var(--fog);border:1px solid var(--stone2);border-radius:var(--r);padding:10px;font-family:ui-monospace,monospace;font-size:12px;margin-bottom:10px;word-break:break-all"></div>
+          <div id="token-list" style="font-size:13px;color:var(--bark3)">Loading…</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── TERMINAL ── -->
+  <div class="panel" id="panel-terminal">
+    <div class="cmd-palette">
+      <span style="font-size:11px;color:#888;font-family:ui-monospace,monospace;margin-right:4px">Quick:</span>
+      <button class="cmd-btn" onclick="runCmd('ollama list')">ollama list</button>
+      <button class="cmd-btn" onclick="runCmd('ollama ps')">ollama ps</button>
+      <button class="cmd-btn" onclick="runCmd('python3 --version')">python version</button>
+      <button class="cmd-btn" onclick="runCmd('pip list')">pip list</button>
+      <button class="cmd-btn" onclick="runCmd('df -h')">disk space</button>
+      <button class="cmd-btn" onclick="runCmd('free -h')">memory</button>
+      <button class="cmd-btn" onclick="runCmd('uptime')">uptime</button>
+      <button class="cmd-btn" onclick="clearTerminal()">clear</button>
+    </div>
+    <div id="terminal-body">
+      <div class="term-line term-sys">Myco terminal — safe command proxy. Only allowlisted commands run.</div>
+      <div class="term-line term-sys">Click a button above or type a command below.</div>
+    </div>
+    <div id="terminal-input-wrap">
+      <span style="color:var(--moss2);font-family:ui-monospace,monospace;font-size:13px">myco $</span>
+      <input id="terminal-input" placeholder="Type a command…" onkeydown="termKey(event)"/>
+    </div>
+  </div>
+
+</main>
+</div>
+
+<div id="toast"></div>
+
+<!-- ══════════════════════════════════════════
+     SERVICE WORKER
+     ══════════════════════════════════════════ -->
+<script>
+if ('serviceWorker' in navigator) navigator.serviceWorker.register('/sw.js').catch(()=>{});
+</script>
+
+<!-- ══════════════════════════════════════════
+     APP LOGIC
+     ══════════════════════════════════════════ -->
+<script>
+const API = 'http://localhost:8000';
+let TOKEN = localStorage.getItem('myco_token') || '';
+let currentSection = 'chat';
+let isBusy = false;
+let chatBubbleDiv = null;
+
+// ── Auth ──────────────────────────────────────────────────────────────────────
+if (!TOKEN) {
+  document.getElementById('onboarding').style.display = 'flex';
+} else {
+  init();
+}
+
+function onboardStep(step) {
+  if (step === 'token') document.getElementById('onboard-token').focus();
+  if (step === 'chat')  { finishOnboard(); }
+}
+
+function finishOnboard() {
+  const t = document.getElementById('onboard-token').value.trim();
+  if (t) { TOKEN = t; localStorage.setItem('myco_token', t); }
+  document.getElementById('onboarding').style.display = 'none';
+  init();
+}
+
+function hdr(extra={}) {
+  return { 'Authorization': `Bearer ${TOKEN}`, 'Content-Type': 'application/json', ...extra };
+}
+
+async function req(method, path, body) {
+  const o = { method, headers: hdr() };
+  if (body) o.body = JSON.stringify(body);
+  const r = await fetch(API + path, o);
+  if (!r.ok) {
+    const e = await r.json().catch(()=>({detail: r.statusText}));
+    throw new Error(e.detail || r.statusText);
+  }
+  return r.json();
+}
+
+// ── Stage data ────────────────────────────────────────────────────────────────
+const STAGES = [
+  {n:'Seedling',f:'🌱',xp:0}, {n:'Sprout',f:'🌿',xp:20},
+  {n:'Sapling',f:'🌳',xp:50},{n:'Budding',f:'🌸',xp:100},
+  {n:'Blooming',f:'🌻',xp:170},{n:'Flourishing',f:'🎋',xp:260},
+  {n:'Ancient',f:'🌲',xp:380}
+];
+function getStage(xp){let s=STAGES[0];for(const t of STAGES)if(xp>=t.xp)s=t;return s;}
+function nextStage(xp){const i=STAGES.indexOf(getStage(xp));return STAGES[i+1]||null;}
+
+const MOODS = {
+  Seedling:'Just sprouted…', Sprout:'Learning fast!', Sapling:'Growing every day',
+  Budding:'Getting curious!', Blooming:'So much to explore!',
+  Flourishing:'Deep in thought…', Ancient:'Wise and wondering'
+};
+
+// ── Mind refresh ──────────────────────────────────────────────────────────────
+// track offline state
+let isOfflineMode = false;
+
+async function refreshMind() {
+  try {
+    // Use /health (no auth) to get mode, then /mind for details
+    const [health, mind] = await Promise.all([
+      fetch(API+'/health').then(r=>r.json()).catch(()=>({offline:true,status:'down'})),
+      req('GET', '/mind').catch(()=>null)
+    ]);
+
+    const d = mind || {};
+    const xp = d.xp || 0;
+    const s = getStage(xp); const nx = nextStage(xp);
+    if (d.memory_count !== undefined) {
+      document.getElementById('mc-face').textContent = s.f;
+      document.getElementById('mc-stage').textContent = s.n;
+      document.getElementById('mc-mood').textContent = MOODS[s.n] || '';
+      document.getElementById('mc-mem').textContent = d.memory_count;
+      document.getElementById('mc-xp-n').textContent = xp;
+      document.getElementById('mc-int').textContent = d.total_interactions||0;
+      document.getElementById('mc-nodes').textContent = d.graph_stats?.nodes||0;
+      const pct = nx ? Math.min(100,Math.round((xp-s.xp)/(nx.xp-s.xp)*100)) : 100;
+      document.getElementById('mc-xp').style.width = pct+'%';
+      const modelName = d.current_model?.split('/').pop()||'—';
+      document.getElementById('model-label').textContent =
+        health.offline ? 'Brain: offline mode' : 'Brain: '+modelName;
+      const amc = document.getElementById('active-model-card');
+      if (amc) amc.innerHTML =
+        `<span class="chip ${health.offline?'red':'green'}">${health.offline?'No AI model':'Online: '+modelName}</span> &nbsp;
+         <span class="chip">${d.graph_stats?.nodes||0} concepts</span> &nbsp;
+         <span class="chip">${d.memory_count} memories</span>`;
+    }
+
+    // Offline mode banner
+    isOfflineMode = health.offline || health.status === 'down';
+    showOfflineBanner(isOfflineMode, health.status === 'down');
+    setStatus(isOfflineMode ? 'offline_mode' : 'alive');
+  } catch(e) {
+    setStatus('offline');
+    showOfflineBanner(false, true);
+  }
+}
+
+function showOfflineBanner(noModel, serverDown) {
+  let banner = document.getElementById('offline-banner');
+  if (!banner) {
+    banner = document.createElement('div');
+    banner.id = 'offline-banner';
+    banner.style.cssText = `
+      display:none; padding:8px 24px; font-size:12px; line-height:1.5;
+      background:rgba(200,128,48,.12); border-bottom:1px solid rgba(200,128,48,.3);
+      color:var(--amber); flex-shrink:0;`;
+    const topbar = document.getElementById('topbar');
+    if (topbar && topbar.parentNode) topbar.parentNode.insertBefore(banner, topbar.nextSibling);
+  }
+  if (serverDown) {
+    banner.style.display = 'block';
+    banner.style.background = 'rgba(200,88,88,.12)';
+    banner.style.borderBottomColor = 'rgba(200,88,88,.3)';
+    banner.style.color = 'var(--red)';
+    banner.innerHTML = '⚠️ Cannot reach Myco server. Make sure it is running: <code style="background:rgba(0,0,0,.1);padding:1px 6px;border-radius:3px">python -m api.main</code>';
+  } else if (noModel) {
+    banner.style.display = 'block';
+    banner.style.background = 'rgba(200,128,48,.12)';
+    banner.style.borderBottomColor = 'rgba(200,128,48,.3)';
+    banner.style.color = 'var(--amber)';
+    banner.innerHTML = '🌱 <strong>Offline mode</strong> — no AI model connected. Myco still works: memory, tools, and plugins all run. <button class="btn sm" style="margin-left:8px;padding:2px 10px;font-size:11px" onclick="showSection(\'settings\');settingsTab(\'models\')">Connect a model →</button>';
+  } else {
+    banner.style.display = 'none';
+  }
+}
+
+function setStatus(s, msg='') {
+  const dot=document.getElementById('status-dot'), txt=document.getElementById('status-text');
+  if (s==='alive') {
+    dot.className='status-dot'; txt.textContent='connected';
+  } else if (s==='busy') {
+    dot.className='status-dot busy'; txt.textContent='thinking…';
+  } else if (s==='offline_mode') {
+    dot.className='status-dot'; dot.style.background='var(--amber)';
+    txt.textContent='offline mode';
+  } else {
+    dot.className='status-dot off'; txt.textContent='server offline';
+  }
+}
+
+// ── Navigation ────────────────────────────────────────────────────────────────
+const TITLES={chat:'Chat',memory:'Memory',ingest:'Teach Myco',
+               growth:'Growth & Goals',plugins:'Plugins',settings:'Settings',terminal:'Terminal'};
+
+function showSection(name) {
+  currentSection = name;
+  document.querySelectorAll('.panel').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.rail-btn').forEach(b=>b.classList.remove('active'));
+  document.getElementById('panel-'+name).classList.add('active');
+  const rb = document.getElementById('rail-'+name);
+  if (rb) rb.classList.add('active');
+  document.getElementById('topbar-title').textContent = TITLES[name]||name;
+  document.getElementById('sidebar-section-title').textContent = TITLES[name]||name;
+  // sidebar sub-nav
+  ['chat','memory','plugins','settings'].forEach(s=>{
+    const el=document.getElementById('sub-'+s);
+    if(el) el.style.display = (s===name?'block':'none');
+  });
+  // lazy load panels
+  if (name==='memory')  loadMemory();
+  if (name==='growth')  loadGrowth();
+  if (name==='plugins') loadPlugins();
+  if (name==='settings') loadSettings();
+}
+
+// ── CHAT ──────────────────────────────────────────────────────────────────────
+function newChat() { document.getElementById('chat-messages').innerHTML = ''; addSystemMsg('New conversation started'); }
+
+function addSystemMsg(txt) {
+  const el = document.createElement('div');
+  el.style.cssText='text-align:center;font-size:11px;color:var(--bark3);padding:6px 0;font-style:italic';
+  el.textContent=txt;
+  document.getElementById('chat-messages').appendChild(el);
+  scrollChat();
+}
+
+function addBubble(role, content, isTyping=false) {
+  const wrap=document.createElement('div');
+  wrap.className='bubble-wrap '+(role==='user'?'user':'');
+  const avatar=document.createElement('div');
+  avatar.className='bubble-avatar';
+  avatar.textContent=role==='user'?'👤':'🌿';
+  const bubble=document.createElement('div');
+  bubble.className='bubble';
+  if(role==='assistant') bubble.innerHTML='<div class="bubble-name">Myco</div>';
+  if(isTyping) bubble.innerHTML+='<div class="typing"><span></span><span></span><span></span></div>';
+  else if(role!=='user') {}
+  else bubble.textContent=content;
+  wrap.appendChild(avatar); wrap.appendChild(bubble);
+  document.getElementById('chat-messages').appendChild(wrap);
+  scrollChat();
+  return bubble;
+}
+
+function scrollChat(){const el=document.getElementById('chat-messages');el.scrollTop=el.scrollHeight;}
+
+async function sendChat() {
+  const inp=document.getElementById('chat-input');
+  const msg=inp.value.trim();
+  if(!msg||isBusy) return;
+  inp.value=''; inp.style.height='28px';
+  isBusy=true; document.getElementById('chat-send').disabled=true; setStatus('busy');
+  document.getElementById('chat-hints').style.display='none';
+  addBubble('user',msg);
+  const bubble=addBubble('assistant','',true);
+  let full='';
+  try {
+    const r=await fetch(API+'/chat',{method:'POST',headers:hdr(),body:JSON.stringify({message:msg})});
+    const reader=r.body.getReader(); const dec=new TextDecoder();
+    bubble.innerHTML='<div class="bubble-name">Myco</div>';
+    while(true){
+      const{done,value}=await reader.read(); if(done)break;
+      for(const line of dec.decode(value).split('\n')){
+        if(!line.startsWith('data: '))continue;
+        try{
+          const d=JSON.parse(line.slice(6));
+          if(d.token){full+=d.token;bubble.innerHTML='<div class="bubble-name">Myco</div>'+renderMd(full);scrollChat();}
+          if(d.done){await refreshMind();}
+          if(d.error){bubble.innerHTML='<div class="bubble-name">Myco</div><span style="color:var(--red)">'+d.error+'</span>';}
+        }catch(e){}
+      }
+    }
+  }catch(e){bubble.innerHTML='<div class="bubble-name">Myco</div><span style="color:var(--red)">Connection error — is Myco running?</span>';}
+  isBusy=false; document.getElementById('chat-send').disabled=false; setStatus('alive');
+}
+
+function renderMd(text) {
+  return text
+    .replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')
+    .replace(/```([\s\S]*?)```/g,'<pre style="background:var(--fog);border:1px solid var(--stone);border-radius:6px;padding:10px;margin:6px 0;overflow-x:auto;font-family:ui-monospace,monospace;font-size:12px">$1</pre>')
+    .replace(/`([^`]+)`/g,'<code style="background:var(--fog);border:1px solid var(--stone);border-radius:3px;padding:1px 5px;font-family:ui-monospace,monospace;font-size:12px">$1</code>')
+    .replace(/\*\*(.+?)\*\*/g,'<strong>$1</strong>')
+    .replace(/\*(.+?)\*/g,'<em>$1</em>')
+    .replace(/\n/g,'<br/>');
+}
+
+function chatKey(e){if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();sendChat();}}
+function autoResize(el){el.style.height='28px';el.style.height=Math.min(el.scrollHeight,120)+'px';}
+function setInput(t){document.getElementById('chat-input').value=t;document.getElementById('chat-input').focus();}
+
+// ── MEMORY ────────────────────────────────────────────────────────────────────
+let memFilter='all';
+function filterMem(f){memFilter=f;loadMemory();}
+
+async function loadMemory(q='') {
+  const grid=document.getElementById('mem-grid');
+  grid.innerHTML='<div style="color:var(--bark3)">Loading…</div>';
+  try{
+    const d=await req('GET','/memory?q='+encodeURIComponent(q||memFilter==='all'?q:'source:'+memFilter)+'&limit=40');
+    const COLS={img:'#6ab4f0',doc:'#c88030',vid:'#5a8a6a',txt:'#8a7068'};
+    document.getElementById('mem-count-label').textContent=d.total+' total memories';
+    if(!d.results.length){grid.innerHTML='<div style="color:var(--bark3);font-style:italic">No memories yet. Start chatting or ingest some content!</div>';return;}
+    grid.innerHTML=d.results.map(m=>`
+      <div class="mem-card">
+        <div class="mem-type">${m.metadata?.type||'memory'}</div>
+        <div class="mem-content">${m.content}</div>
+        <div class="mem-src">
+          <span class="src-dot" style="background:${COLS[m.metadata?.source]||'#8a7068'}"></span>
+          ${m.metadata?.label||'conversation'} · confidence ${m.metadata?.confidence||'?'}/5
+        </div>
+      </div>`).join('');
+  }catch(e){grid.innerHTML='<div style="color:var(--red)">'+e.message+'</div>';}
+}
+
+// ── INGEST ────────────────────────────────────────────────────────────────────
+function dzOver(e){e.preventDefault();document.getElementById('drop-zone').style.borderColor='var(--clay)';}
+function dzOut(e){document.getElementById('drop-zone').style.borderColor='var(--stone2)';}
+function dzDrop(e){e.preventDefault();dzOut();if(e.dataTransfer.files[0])processFile(e.dataTransfer.files[0]);}
+function ingestFile(inp){if(inp.files[0])processFile(inp.files[0]);}
+
+function processFile(file){
+  const rd=new FileReader();
+  rd.onload=async e=>{
+    await doIngest(String(e.target.result).slice(0,40000),'document',file.name);
+  };
+  rd.readAsText(file);
+}
+async function ingestURL(){
+  const v=document.getElementById('url-input').value.trim();
+  if(!v)return;
+  document.getElementById('url-input').value='';
+  await doIngest(v,'url',v.slice(0,60));
+}
+async function ingestPaste(){
+  const v=document.getElementById('paste-input').value.trim();
+  if(!v)return;
+  document.getElementById('paste-input').value='';
+  await doIngest(v,'text','pasted text');
+}
+
+async function doIngest(content,type,label){
+  const feed=document.getElementById('ingest-feed');
+  const card=document.createElement('div');
+  card.className='card'; card.style.borderColor='var(--stone2)';
+  card.innerHTML=`<div class="card-title" style="color:var(--amber)">⟳ Reading "${label}"…</div>`;
+  feed.prepend(card);
+  try{
+    const d=await req('POST','/ingest',{content,source_type:type,source_label:label});
+    card.innerHTML=`
+      <div class="card-title" style="color:var(--moss)">✓ Learned from "${label}"</div>
+      <div style="font-size:14px;margin-bottom:6px">${d.reaction||'Interesting!'}</div>
+      <div style="font-size:12px;color:var(--bark3)">${d.summary||''}</div>
+      <div style="font-size:11px;color:var(--bark3);margin-top:6px;font-family:ui-monospace,monospace">${(d.memories||[]).length} memories extracted</div>`;
+    card.style.borderColor='var(--moss)';
+    await refreshMind(); toast('Learned from '+label,'success');
+  }catch(e){card.innerHTML=`<div class="card-title" style="color:var(--red)">✗ Failed: ${e.message}</div>`;card.style.borderColor='var(--red)';}
+}
+
+// ── GROWTH ────────────────────────────────────────────────────────────────────
+async function loadGrowth(){
+  try{
+    const[hist,pending,lstats]=await Promise.all([
+      req('GET','/growth/history'),
+      req('GET','/self-improve/pending'),
+      req('GET','/learner/stats'),
+    ]);
+    // approvals
+    const al=document.getElementById('approvals-list');
+    if(!pending.pending.length){al.innerHTML='<div style="color:var(--bark3);font-size:13px;font-style:italic">No pending changes. All good!</div>';}
+    else al.innerHTML=pending.pending.map(p=>`
+      <div class="approval-card">
+        <div class="ac-header"><span class="ac-badge">${p.action_type}</span><span class="ac-badge" style="border-color:var(--moss);color:var(--moss);background:rgba(90,138,106,.1)">sandbox: ${p.sandbox_verdict||'passed'}</span></div>
+        <div class="ac-desc">${p.description}</div>
+        <div class="ac-actions">
+          <button class="btn success sm" onclick="approveP('${p.plan_id}')">✓ Approve</button>
+          <button class="btn danger sm"  onclick="rejectP('${p.plan_id}')">✗ Reject</button>
+        </div>
+      </div>`).join('');
+    // goals
+    const gl=document.getElementById('goals-list');
+    const goals=hist.history.filter(h=>h.action_type==='goal');
+    gl.innerHTML=goals.length?goals.map(g=>`
+      <div class="goal-item ${g.status==='integrated'?'goal-done':''}">
+        <span class="goal-status">${g.status==='integrated'?'✅':'🎯'}</span>
+        <div><div class="goal-text">${g.description}</div><div class="goal-meta">${g.status} · ${g.action_type}</div></div>
+      </div>`).join(''):'<div style="color:var(--bark3);font-size:13px;font-style:italic">No goals yet.</div>';
+    // learner stats
+    document.getElementById('learn-stats').innerHTML=`<span class="chip">${lstats.queued} queued</span> &nbsp; <span class="chip green">${lstats.resolved} researched</span>`;
+    // history
+    const hl=document.getElementById('history-list');
+    const other=hist.history.filter(h=>h.action_type!=='goal').slice().reverse().slice(0,8);
+    hl.innerHTML=other.length?other.map(h=>`
+      <div class="goal-item">
+        <span class="goal-status" style="font-size:14px">${h.status==='integrated'?'✅':h.status.includes('reject')?'❌':'⏳'}</span>
+        <div><div class="goal-text">${h.action_type}: ${h.description}</div><div class="goal-meta">${h.status}</div></div>
+      </div>`).join(''):'<div style="color:var(--bark3);font-size:13px;font-style:italic">No history yet.</div>';
+  }catch(e){console.error(e);}
+}
+
+async function approveP(id){try{await req('POST','/self-improve/approve/'+id);toast('Approved!','success');loadGrowth();}catch(e){toast(e.message,'error');}}
+async function rejectP(id){const r=prompt('Reason (optional)?')||'';try{await req('POST','/self-improve/reject/'+id,{reason:r});toast('Rejected.');loadGrowth();}catch(e){toast(e.message,'error');}}
+async function triggerReflect(){try{await req('POST','/reflect');toast('Reflection triggered!','success');setTimeout(loadGrowth,1500);}catch(e){toast(e.message,'error');}}
+async function queueLearn(){
+  const t=document.getElementById('learn-topic').value.trim();
+  if(!t)return; document.getElementById('learn-topic').value='';
+  try{await req('POST','/learner/queue',{topic:t,query:t+' tutorial guide explanation'});toast('Queued: '+t,'success');}catch(e){toast(e.message,'error');}
+}
+
+// ── PLUGINS ───────────────────────────────────────────────────────────────────
+// All example plugins work WITHOUT an LLM — pure Python logic only
+const EXAMPLE_PLUGINS = [
+  { name:'Calculator', desc:'Complex math — works with no AI model at all', icon:'🔢', type:'tool',
+    code:"def calculate(expression: str) -> str:\n    \"\"\"Evaluate a math expression safely\"\"\"\n    import ast, operator\n    ops={ast.Add:operator.add,ast.Sub:operator.sub,ast.Mult:operator.mul,ast.Div:operator.truediv,ast.Pow:operator.pow,ast.Mod:operator.mod}\n    def ev(n):\n        if isinstance(n,ast.Constant): return n.value\n        if isinstance(n,ast.BinOp): return ops[type(n.op)](ev(n.left),ev(n.right))\n        raise ValueError('Unsafe')\n    try: return str(round(ev(ast.parse(expression,mode='eval').body),10))\n    except Exception as e: return 'Math error: '+str(e)"},
+
+  { name:'Word Analyser', desc:'Count words, sentences, reading time — no AI needed', icon:'📊', type:'tool',
+    code:"def word_count(text: str) -> str:\n    \"\"\"Count words, sentences, reading time\"\"\"\n    words=len(text.split()); sents=max(1,text.count('.')+text.count('!')+text.count('?'))\n    return f'Words: {words} | Sentences: {sents} | ~{round(words/200,1)} min read'\n\ndef text_stats(text: str) -> str:\n    \"\"\"Vocabulary richness and avg sentence length\"\"\"\n    words=text.lower().split(); unique=len(set(words))\n    avg=round(len(words)/max(1,text.count('.')+text.count('!')+text.count('?')),1)\n    return f'Unique: {unique} | Richness: {round(unique/max(1,len(words))*100,1)}% | Avg sentence: {avg} words'"},
+
+  { name:'Unit Converter', desc:'Length, weight, temperature — pure Python', icon:'📐', type:'tool',
+    code:"def convert(value: str, from_unit: str, to_unit: str) -> str:\n    \"\"\"Convert units: m/cm/km/ft/in, kg/g/lb/oz, C/F/K\"\"\"\n    v=float(value); fu,tu=from_unit.lower(),to_unit.lower()\n    L={'m':1,'cm':.01,'km':1000,'ft':.3048,'in':.0254,'mi':1609.34}\n    W={'kg':1,'g':.001,'lb':.453592,'oz':.0283495}\n    if fu in L and tu in L: return str(round(v*L[fu]/L[tu],6))+' '+tu\n    if fu in W and tu in W: return str(round(v*W[fu]/W[tu],6))+' '+tu\n    if fu=='c' and tu=='f': return str(round(v*9/5+32,2))+'F'\n    if fu=='f' and tu=='c': return str(round((v-32)*5/9,2))+'C'\n    if fu=='c' and tu=='k': return str(round(v+273.15,2))+'K'\n    return f'Unknown: {from_unit} to {to_unit}'"},
+
+  { name:'JSON Tools', desc:'Format and table-view JSON — no AI needed', icon:'🔧', type:'tool',
+    code:"def format_json(text: str) -> str:\n    \"\"\"Format and validate JSON\"\"\"\n    import json\n    try: return json.dumps(json.loads(text),indent=2,ensure_ascii=False)\n    except json.JSONDecodeError as e: return f'Invalid JSON: {e}'\n\ndef json_to_table(text: str) -> str:\n    \"\"\"Convert JSON array to readable table\"\"\"\n    import json\n    try:\n        data=json.loads(text)\n        if not isinstance(data,list) or not data: return 'Expected a JSON array'\n        keys=list(data[0].keys())[:5]\n        header=' | '.join(k[:12].ljust(12) for k in keys)\n        rows=['\\n'.join(' | '.join(str(r.get(k,'')).ljust(12)[:12] for k in keys) for r in data[:8])]\n        return header+'\\n'+'-+-'.join('-'*12 for _ in keys)+'\\n'+rows[0]\n    except Exception as e: return f'Error: {e}'"},
+
+  { name:'Color Explorer', desc:'Interactive HSL color picker — visual panel, no AI', icon:'🎨', type:'viewer',
+    code:'UI_WIDGET = \'\'\'<div style="padding:14px;font-family:system-ui,sans-serif;background:#faf8f3"><b style="color:#3a2e28">Color Explorer</b><div style="display:grid;grid-template-columns:auto 1fr;gap:5px 10px;align-items:center;margin:10px 0"><label style="font-size:11px;color:#8a7068">Hue</label><input type="range" id="h" min="0" max="360" value="210" style="width:100%"/><label style="font-size:11px;color:#8a7068">Sat</label><input type="range" id="s" min="0" max="100" value="65" style="width:100%"/><label style="font-size:11px;color:#8a7068">Light</label><input type="range" id="l" min="0" max="100" value="55" style="width:100%"/></div><div id="sw" style="height:60px;border-radius:8px;border:1px solid #e0d8cc;transition:background .1s;margin-bottom:6px"></div><div id="vl" style="font-family:monospace;font-size:12px;color:#5c4a40"></div><script>function u(){var h=document.getElementById("h").value,s=document.getElementById("s").value,l=document.getElementById("l").value;document.getElementById("sw").style.background="hsl("+h+","+s+"%,"+l+"%)";document.getElementById("vl").textContent="HSL("+h+","+s+"%,"+l+"%)";}["h","s","l"].forEach(function(id){document.getElementById(id).addEventListener("input",u)});u();<\\/script></div>\'\'\'' },
+
+  { name:'3D Cube Viewer', desc:'Interactive 3D object — drag to rotate. Myco can show 3D!', icon:'📦', type:'viewer',
+    code:'UI_WIDGET = \'\'\'<div style="padding:12px;background:#0c0c0f;color:#e8e8f0;font-family:system-ui"><div style="font-size:12px;margin-bottom:6px;color:#7aeba4">3D Viewer — drag to rotate, scroll to zoom</div><canvas id="cv" width="320" height="220" style="border-radius:6px;cursor:grab;display:block"></canvas><script>(function(){var c=document.getElementById("cv"),x=c.getContext("2d"),rx=.5,ry=.7,sc=70,dr=false,lx=0,ly=0,vt=[[-1,-1,-1],[1,-1,-1],[1,1,-1],[-1,1,-1],[-1,-1,1],[1,-1,1],[1,1,1],[-1,1,1]],fs=[[0,1,2,3],[4,5,6,7],[0,1,5,4],[2,3,7,6],[0,3,7,4],[1,2,6,5]],fc=["#c8956c","#7aeba4","#6ab4f0","#b080f0","#f0c060","#f07070"];function rot(v){var a=v[0],b=v[1],e=v[2],b2=b*Math.cos(rx)-e*Math.sin(rx),e2=b*Math.sin(rx)+e*Math.cos(rx),a2=a*Math.cos(ry)+e2*Math.sin(ry),e3=-a*Math.sin(ry)+e2*Math.cos(ry);return[a2,b2,e3];}function pr(v){var f=3/(3+v[2]);return[160+v[0]*sc*f,110-v[1]*sc*f];}function draw(){x.fillStyle="#0c0c0f";x.fillRect(0,0,320,220);var pv=vt.map(rot);fs.forEach(function(f,i){var pts=f.map(function(j){return pr(pv[j]);});var nx=(pts[1][0]-pts[0][0])*(pts[2][1]-pts[0][1])-(pts[1][1]-pts[0][1])*(pts[2][0]-pts[0][0]);if(nx>0)return;x.beginPath();x.moveTo(pts[0][0],pts[0][1]);pts.slice(1).forEach(function(p){x.lineTo(p[0],p[1]);});x.closePath();x.fillStyle=fc[i];x.strokeStyle="rgba(0,0,0,.4)";x.lineWidth=1;x.fill();x.stroke();});}c.addEventListener("mousedown",function(e){dr=true;lx=e.clientX;ly=e.clientY;c.style.cursor="grabbing";});document.addEventListener("mouseup",function(){dr=false;c.style.cursor="grab";});document.addEventListener("mousemove",function(e){if(!dr)return;rx-=(e.clientY-ly)*.01;ry+=(e.clientX-lx)*.01;lx=e.clientX;ly=e.clientY;draw();});c.addEventListener("wheel",function(e){sc=Math.max(30,Math.min(180,sc-e.deltaY*.1));draw();e.preventDefault();},{passive:false});draw();setInterval(function(){if(!dr){ry+=.007;draw();}},30);})();<\\/script></div>\'\'\'' },
+];
+
+let pluginsTab_current = 'installed';
+let currentSrc = 'paste';
+
+function pluginsTab(tab) {
+  pluginsTab_current = tab;
+  ['installed','install','examples'].forEach(t => {
+    const el = document.getElementById('plugins-'+t);
+    if (el) el.style.display = t===tab ? 'block' : 'none';
+  });
+  document.querySelectorAll('#sub-plugins .sidebar-item').forEach((b,i) =>
+    b.classList.toggle('active', ['installed','install','examples'][i]===tab)
+  );
+  if (tab==='examples') renderExamples();
+  if (tab==='installed') loadPlugins();
+}
+
+function setSrc(src, btn) {
+  currentSrc = src;
+  document.querySelectorAll('#src-picker .btn').forEach(b => b.classList.remove('active'));
+  if (btn) btn.classList.add('active');
+  ['paste','github','file'].forEach(s => {
+    const el = document.getElementById('src-'+s);
+    if (el) el.style.display = s===src ? 'block' : 'none';
+  });
+}
+
+function loadPyFile(inp) {
+  if (!inp.files[0]) return;
+  const rd = new FileReader();
+  rd.onload = e => {
+    const ta = document.getElementById('pi-code');
+    if (ta) ta.value = e.target.result;
+    const nm = document.getElementById('pi-name');
+    if (nm && !nm.value) nm.value = inp.files[0].name.replace('.py','');
+    setSrc('paste', document.querySelector('#src-picker .btn'));
+  };
+  rd.readAsText(inp.files[0]);
+}
+
+async function previewPlugin() {
+  const code = document.getElementById('pi-code')?.value?.trim()||'';
+  const url  = document.getElementById('pi-url')?.value?.trim()||'';
+  const name = document.getElementById('pi-name')?.value?.trim()||'';
+  if (!code && !url) { toast('Paste some code or a GitHub URL first','error'); return; }
+  try {
+    const d = await req('POST', '/merge/preview', {code, url, name, description:''});
+    const p = d.preview;
+    const card = document.getElementById('preview-card');
+    if (card) {
+      card.style.display = 'block';
+      document.getElementById('preview-content').innerHTML =
+        `<div style="display:flex;flex-wrap:wrap;gap:6px;margin-bottom:10px">
+          <span class="chip ${p.safe_to_install?'green':'red'}">${p.safe_to_install?'Safe to install':'Review needed'}</span>
+          <span class="chip">${p.lines} lines</span>
+          <span class="chip">${p.functions.length} functions</span>
+          ${p.has_ui_widget?'<span class="chip blue">Has visual panel</span>':''}
+        </div>
+        ${p.functions.length?`<div style="margin-bottom:8px"><div class="form-label">Functions Myco gains</div>${p.functions.map(f=>`<span class="chip" style="margin:2px">${f}()</span>`).join('')}</div>`:''}
+        ${p.safe_deps.length?`<div style="margin-bottom:6px"><div class="form-label">Safe dependencies (auto-install)</div>${p.safe_deps.map(d=>`<span class="chip green" style="margin:2px">${d}</span>`).join('')}</div>`:''}
+        ${p.unsafe_deps.length?`<div style="margin-bottom:6px"><div class="form-label" style="color:var(--red)">Blocked imports</div>${p.unsafe_deps.map(d=>`<span class="chip red" style="margin:2px">${d}</span>`).join('')}</div>`:''}
+        ${p.violations.length?`<div style="color:var(--red);font-size:12px;padding:8px;background:rgba(200,88,88,.08);border-radius:6px">${p.violations.slice(0,3).join('<br/>')}</div>`:''}`;
+    }
+    if (!document.getElementById('pi-name')?.value && d.name)
+      document.getElementById('pi-name').value = d.name;
+  } catch(e) { toast(e.message, 'error'); }
+}
+
+async function installPlugin() {
+  const name = document.getElementById('pi-name')?.value?.trim()||'';
+  const code = document.getElementById('pi-code')?.value?.trim()||'';
+  const url  = document.getElementById('pi-url')?.value?.trim()||'';
+  const desc = document.getElementById('pi-desc')?.value?.trim()||'';
+  const type = document.getElementById('pi-type')?.value||'tool';
+  if (!name) { toast('Enter a plugin name','error'); return; }
+  if (!code && !url) { toast('Paste code or a GitHub URL','error'); return; }
+  const res = document.getElementById('install-result');
+  if (res) res.innerHTML = '<span style="color:var(--amber)">Testing in security sandbox...</span>';
+  try {
+    const body = url ? {url,name,description:desc,install_deps:true}
+                     : {code,name,description:desc,plugin_type:type,icon:'🧩'};
+    const endpoint = url ? '/merge/apply' : '/plugins/install';
+    const d = await req('POST', endpoint, body);
+    if (d.ok || d.plugin_id) {
+      const tools = d.manifest?.tools||[];
+      if (res) res.innerHTML = `<div style="background:rgba(90,138,106,.1);border:1px solid var(--moss);border-radius:var(--r2);padding:12px;margin-top:4px">
+        <div style="color:var(--moss);font-size:14px;margin-bottom:6px">Installed: ${name}</div>
+        ${tools.length?`<div style="font-size:12px;color:var(--bark3)">New tools added: ${tools.map(t=>`<code style="background:var(--fog);padding:1px 5px;border-radius:3px">${t.split('_').slice(2).join('_')||t}</code>`).join(' ')}</div>`:''}
+        ${d.manifest?.ui_slot?'<div style="font-size:12px;color:var(--sky);margin-top:4px">Visual panel added — see the Installed tab</div>':''}
+      </div>`;
+      toast('Installed: '+name, 'success');
+      setTimeout(() => pluginsTab('installed'), 1800);
+    } else {
+      if (res) res.innerHTML = `<div style="color:var(--red);padding:10px;background:rgba(200,88,88,.08);border:1px solid var(--red);border-radius:var(--r2)">${d.reason||'Install failed'}</div>`;
+    }
+  } catch(e) {
+    if (res) res.innerHTML = `<div style="color:var(--red);padding:10px;background:rgba(200,88,88,.08);border:1px solid var(--red);border-radius:var(--r2)">${e.message}</div>`;
+  }
+}
+
+async function loadPlugins() {
+  try {
+    const d = await req('GET', '/plugins');
+    const grid = document.getElementById('plugin-grid');
+    if (!grid) return;
+    if (!d.plugins.length) {
+      grid.innerHTML = `<div style="color:var(--bark3);font-style:italic;grid-column:1/-1;padding:20px 0">
+        No plugins installed yet.
+        <div style="margin-top:12px;display:flex;gap:8px;flex-wrap:wrap">
+          <button class="btn primary sm" onclick="pluginsTab('examples')">Try example plugins</button>
+          <button class="btn sm" onclick="pluginsTab('install')">Install from code or GitHub</button>
+        </div></div>`;
+    } else {
+      grid.innerHTML = d.plugins.map(p => `
+        <div class="plugin-card ${p.enabled?'':'disabled'}">
+          <div class="pc-header">
+            <span class="pc-icon">${p.icon||'🧩'}</span>
+            <div class="pc-info">
+              <div class="pc-name">${p.name}</div>
+              <div class="pc-type">${p.plugin_type}${p.ui_slot?' · has panel':''}</div>
+            </div>
+          </div>
+          <div class="pc-desc">${p.description}</div>
+          <div class="pc-tools">${(p.tools||[]).slice(0,4).map(t=>`<span class="chip">${t.split('_').slice(2).join('_')||t}</span>`).join('')}</div>
+          <div class="pc-actions">
+            <button class="btn sm ${p.enabled?'danger':'success'}" onclick="togglePlugin('${p.plugin_id}',${!p.enabled})">${p.enabled?'Disable':'Enable'}</button>
+            <button class="btn sm" onclick="removePlugin('${p.plugin_id}','${p.name}')">Remove</button>
+          </div>
+        </div>`).join('');
+    }
+    const viewers = d.plugins.filter(p => p.ui_slot && p.enabled);
+    const vEl = document.getElementById('plugin-viewers');
+    if (vEl) {
+      if (viewers.length) {
+        vEl.innerHTML = '<div style="font-size:12px;color:var(--bark3);text-transform:uppercase;letter-spacing:.05em;margin:16px 0 12px;font-family:ui-monospace,monospace">Visual Panels</div>';
+        viewers.forEach(p => {
+          const wrap = document.createElement('div');
+          wrap.className = 'viewer-container';
+          wrap.innerHTML = `<div class="viewer-title"><span>${p.icon||'🖥'}</span> ${p.name}</div>`;
+          const iframe = document.createElement('iframe');
+          iframe.className = 'viewer-iframe';
+          iframe.src = `${API}/plugins/${p.plugin_id}/widget?_t=${Date.now()}`;
+          iframe.style.minHeight = '320px';
+          iframe.setAttribute('sandbox','allow-scripts');
+          iframe.setAttribute('title', p.name+' panel');
+          wrap.appendChild(iframe);
+          vEl.appendChild(wrap);
+        });
+      } else { vEl.innerHTML = ''; }
+    }
+  } catch(e) {
+    const g = document.getElementById('plugin-grid');
+    if (g) g.innerHTML = `<div style="color:var(--red)">${e.message}</div>`;
+  }
+}
+
+function renderExamples() {
+  const el = document.getElementById('examples-grid');
+  if (!el) return;
+  el.innerHTML = EXAMPLE_PLUGINS.map((p,i) => `
+    <div class="plugin-card">
+      <div class="pc-header"><span class="pc-icon">${p.icon}</span><div class="pc-info"><div class="pc-name">${p.name}</div><div class="pc-type">${p.type}</div></div></div>
+      <div class="pc-desc">${p.desc}</div>
+      <div class="pc-actions"><button class="btn primary sm" onclick="installExample(${i})">Install</button></div>
+    </div>`).join('');
+}
+
+async function installExample(i) {
+  const p = EXAMPLE_PLUGINS[i];
+  try {
+    const d = await req('POST', '/plugins/install', {code:p.code, name:p.name, description:p.desc, plugin_type:p.type, icon:p.icon});
+    if (d.ok || d.plugin_id) { toast('Installed: '+p.name, 'success'); pluginsTab('installed'); }
+    else toast('Failed: '+(d.reason||'error'), 'error');
+  } catch(e) { toast(e.message, 'error'); }
+}
+
+async function togglePlugin(id, enabled) {
+  try { await req('POST','/plugins/'+id+'/toggle',{enabled}); loadPlugins(); toast(enabled?'Plugin enabled':'Plugin disabled'); }
+  catch(e) { toast(e.message,'error'); }
+}
+
+async function removePlugin(id, name) {
+  if (!confirm('Remove "'+name+'"? This cannot be undone.')) return;
+  try { await req('DELETE','/plugins/'+id); toast('Removed: '+name); loadPlugins(); }
+  catch(e) { toast(e.message,'error'); }
+}
+
+
+// ── SETTINGS ──────────────────────────────────────────────────────────────────
+const settingSections=['general','models','memory','safety','tokens'];
+
+function settingsTab(tab){
+  settingSections.forEach(s=>document.getElementById('settings-'+s).style.display=s===tab?'block':'none');
+  document.querySelectorAll('#sub-settings .sidebar-item').forEach((b,i)=>
+    b.classList.toggle('active',settingSections[i]===tab)
+  );
+  if(tab==='models') loadModelSettings();
+  if(tab==='memory') loadSnapshots();
+  if(tab==='tokens') loadTokens();
+  if(tab==='safety') loadAudit();
+}
+
+async function loadSettings(){
+  settingsTab('general');
+  try{
+    const d=await req('GET','/settings');
+    const s=d.settings||{};
+    if(s.resource_profile) document.getElementById('s-resource').value=s.resource_profile;
+    if(s.generation?.max_tokens) document.getElementById('s-maxtokens').value=s.generation.max_tokens;
+    if(s.prefer_tfidf!==undefined) document.getElementById('s-tfidf').checked=s.prefer_tfidf;
+  }catch(e){}
+}
+
+async function saveSetting(key,value){
+  try{
+    await req('POST','/settings/update',{key,value:String(value)});
+    toast('Saved: '+key,'success');
+  }catch(e){toast('Error saving: '+e.message,'error');}
+}
+
+const PROVIDER_MODELS={
+  ollama:['qwen2.5:1.5b','llama3.2:1b','llama3.2:3b','mistral','phi3','gemma2','tinyllama'],
+  anthropic:['claude-sonnet-4-20250514','claude-opus-4-5','claude-haiku-4-5-20251001'],
+  openai:['gpt-4o','gpt-4o-mini','gpt-4-turbo'],
+  google:['gemini-2.0-flash','gemini-1.5-pro','gemini-1.5-flash'],
+  mistral:['mistral-large-latest','mistral-small-latest'],
+  cohere:['command-r-plus','command-r'],
+  custom:['your-model-name'],
+};
+
+let selProvider='ollama';
+function selectProvider(p,btn){
+  selProvider=p;
+  document.querySelectorAll('#provider-pills .btn').forEach(b=>b.classList.remove('active'));
+  if(btn) btn.classList.add('active');
+  const isLocal=p==='ollama'||p==='custom';
+  const needsKey=!isLocal;
+  document.getElementById('model-form').innerHTML=`
+    <div class="form-row">
+      <div class="form-group"><label class="form-label">Model</label>
+        <select class="form-select" id="mf-model">${(PROVIDER_MODELS[p]||[p]).map(m=>`<option>${m}</option>`).join('')}</select>
+      </div>
+      ${isLocal?`<div class="form-group"><label class="form-label">Endpoint</label><input class="form-input" id="mf-endpoint" value="${p==='ollama'?'http://localhost:11434':''}"/></div>`:''}
+      ${needsKey?`<div class="form-group"><label class="form-label">API Key</label><input class="form-input" id="mf-key" type="password" placeholder="sk-…"/></div>`:''}
+    </div>`;
+}
+
+async function applyModel(){
+  const model=document.getElementById('mf-model')?.value;
+  const key=document.getElementById('mf-key')?.value||'';
+  const endpoint=document.getElementById('mf-endpoint')?.value||'';
+  if(!model)return;
+  try{
+    await req('POST','/models/add',{provider:selProvider,model,api_key:key||null,endpoint:endpoint||null,tier:'tier_balanced'});
+    await req('POST','/models/switch',{model:selProvider+'/'+model});
+    await refreshMind();
+    document.getElementById('model-result').innerHTML=`<span style="color:var(--moss)">✓ Switched to ${model}</span>`;
+    toast('Brain switched to '+model,'success');
+  }catch(e){document.getElementById('model-result').innerHTML=`<span style="color:var(--red)">${e.message}</span>`;}
+}
+
+async function loadModelSettings(){
+  selectProvider('ollama');
+  try{
+    const d=await req('GET','/models');
+    const el=document.getElementById('model-tiers');
+    el.innerHTML=Object.entries(d.tiers).map(([tier,models])=>
+      `<div style="margin-bottom:8px"><div style="font-size:10px;text-transform:uppercase;letter-spacing:.05em;color:var(--bark3);margin-bottom:3px;font-family:ui-monospace,monospace">${tier}</div>
+       ${models.map(m=>`<span class="chip" style="margin:2px">${m}</span>`).join(' ')}</div>`
+    ).join('');
+  }catch(e){}
+}
+
+async function loadSnapshots(){
+  try{
+    const d=await req('GET','/snapshots');
+    const el=document.getElementById('snap-list');
+    if(!d.snapshots.length){el.textContent='No snapshots yet.';return;}
+    el.innerHTML=d.snapshots.slice(0,5).map(s=>`
+      <div style="display:flex;align-items:center;justify-content:space-between;padding:8px 0;border-bottom:1px solid var(--stone)">
+        <div>
+          <div style="font-size:13px">${s.label||'snapshot'}</div>
+          <div style="font-size:11px;color:var(--bark3);font-family:ui-monospace,monospace">${new Date(s.ts*1000).toLocaleString()} · ${s.reason||''}</div>
+        </div>
+        <button class="btn danger sm" onclick="doRollback('${s.id}')">Rollback</button>
+      </div>`).join('');
+  }catch(e){}
+}
+
+async function createSnapshot(){
+  const label=document.getElementById('snap-label')?.value?.trim()||'';
+  try{const d=await req('POST','/snapshot',{label,reason:'manual'});toast('Snapshot saved','success');loadSnapshots();}
+  catch(e){toast(e.message,'error');}
+}
+
+async function doRollback(id){
+  if(!confirm('Roll back to this snapshot? Current memory state will change.'))return;
+  try{await req('POST','/rollback/'+id);toast('Rolled back','success');await refreshMind();}catch(e){toast(e.message,'error');}
+}
+
+async function loadAudit(){
+  try{
+    const d=await req('GET','/audit?n=20');
+    document.getElementById('audit-preview').innerHTML=
+      `<div style="margin-bottom:8px"><span class="chip">${d.stats.total_entries||0} total entries</span> &nbsp; <span class="chip red">${d.stats.threats||0} threats</span> &nbsp; <span class="chip ${d.stats.chain_valid?'green':'red'}">${d.stats.chain_valid?'chain OK':'chain BROKEN'}</span></div>`;
+  }catch(e){}
+}
+
+async function verifyChain(){
+  try{const d=await req('GET','/audit/verify');toast(d.valid?'Chain intact ✓':'CHAIN BROKEN: '+d.message,d.valid?'success':'error');}catch(e){toast(e.message,'error');}
+}
+
+async function loadTokens(){
+  try{
+    const d=await req('GET','/tokens');
+    document.getElementById('token-list').innerHTML=d.tokens.map(t=>`
+      <div style="display:flex;align-items:center;justify-content:space-between;padding:8px 0;border-bottom:1px solid var(--stone)">
+        <div>
+          <span class="chip ${t.role==='parent'?'amber':(t.role==='user'?'green':'')}">${t.role}</span>
+          <span style="font-size:13px;margin-left:8px">${t.label}</span>
+          <span style="font-size:11px;color:var(--bark3);margin-left:8px;font-family:ui-monospace,monospace">${t.token_id}</span>
+        </div>
+        <button class="btn danger sm" onclick="revokeToken('${t.token_id}')">Revoke</button>
+      </div>`).join('');
+  }catch(e){}
+}
+
+async function createToken(){
+  const label=document.getElementById('tok-label').value.trim();
+  const role=document.getElementById('tok-role').value;
+  if(!label){toast('Enter a label','error');return;}
+  try{
+    const d=await req('POST','/tokens/create',{role,label});
+    const el=document.getElementById('new-token-display');
+    el.style.display='block';
+    el.innerHTML=`<strong>Save this token — it won't show again:</strong><br/>${d.token}`;
+    loadTokens();
+  }catch(e){toast(e.message,'error');}
+}
+
+async function revokeToken(id){
+  if(!confirm('Revoke this token?'))return;
+  try{await req('DELETE','/tokens/'+id);toast('Revoked');loadTokens();}catch(e){toast(e.message,'error');}
+}
+
+// ── TERMINAL ──────────────────────────────────────────────────────────────────
+function termKey(e){if(e.key==='Enter'){const v=document.getElementById('terminal-input').value.trim();if(v){runCmd(v);document.getElementById('terminal-input').value='';}}}
+
+async function runCmd(cmd){
+  const tb=document.getElementById('terminal-body');
+  tb.innerHTML+=`<div class="term-line"><span class="term-prompt">myco $ </span>${cmd}</div>`;
+  try{
+    const d=await req('GET','/terminal/run?cmd='+encodeURIComponent(cmd));
+    if(d.stdout) tb.innerHTML+=`<div class="term-line term-out">${d.stdout}</div>`;
+    if(d.stderr) tb.innerHTML+=`<div class="term-line term-err">${d.stderr}</div>`;
+  }catch(e){tb.innerHTML+=`<div class="term-line term-err">${e.message}</div>`;}
+  tb.scrollTop=tb.scrollHeight;
+}
+
+function clearTerminal(){document.getElementById('terminal-body').innerHTML='';}
+
+// ── TOAST ─────────────────────────────────────────────────────────────────────
+function toast(msg,type=''){
+  const el=document.getElementById('toast');
+  el.textContent=msg; el.className=''; el.classList.add('show');
+  if(type) el.classList.add(type);
+  setTimeout(()=>el.classList.remove('show'),3000);
+}
+
+// ── INIT ──────────────────────────────────────────────────────────────────────
+async function init(){
+  await refreshMind();
+  setInterval(refreshMind, 15000);
+  showSection('chat');
+
+  // Welcome message — adapts to online/offline mode
+  setTimeout(async () => {
+    if (document.getElementById('chat-messages').children.length) return;
+    const b = addBubble('assistant','');
+
+    // Check mode quickly
+    let mode = 'online';
+    try {
+      const h = await fetch(API+'/health').then(r=>r.json()).catch(()=>({offline:true}));
+      mode = h.offline ? 'offline' : 'online';
+    } catch(e) { mode = 'server_down'; }
+
+    if (mode === 'server_down') {
+      b.innerHTML = `<div class="bubble-name">Myco</div>
+        I can't reach the Myco server right now.<br/><br/>
+        Make sure it is running:<br/>
+        <code style="background:var(--fog);padding:2px 8px;border-radius:4px;font-size:12px">python -m api.main</code><br/><br/>
+        Then refresh this page.`;
+    } else if (mode === 'offline') {
+      b.innerHTML = `<div class="bubble-name">Myco</div>
+        Hello! I'm Myco — and I'm currently running in <strong>offline mode</strong> (no AI model connected).<br/><br/>
+        I can still:<br/>
+        <ul style="margin:6px 0 6px 16px;line-height:1.8">
+          <li>Answer questions from my memory</li>
+          <li>Use all my tools (calculator, unit converter…)</li>
+          <li>Learn from documents you share with me</li>
+          <li>Run installed plugins</li>
+        </ul>
+        To unlock full AI: go to <strong>Settings → AI Models</strong> and connect Ollama or an API key.`;
+    } else {
+      b.innerHTML = `<div class="bubble-name">Myco</div>
+        Hello! I'm Myco — a mind that grows. I learn from everything we talk about,
+        every file you share, and every topic I research.<br/><br/>
+        What would you like to explore today?`;
+    }
+  }, 700);
+}
+</script>
+</body>
+</html>
